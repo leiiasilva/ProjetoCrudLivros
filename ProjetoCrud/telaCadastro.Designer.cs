@@ -33,7 +33,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.nomeTextBox = new System.Windows.Forms.TextBox();
             this.autorTextBox = new System.Windows.Forms.TextBox();
             this.editoraTextBox = new System.Windows.Forms.TextBox();
@@ -91,16 +90,6 @@
             this.label5.Size = new System.Drawing.Size(179, 28);
             this.label5.TabIndex = 4;
             this.label5.Text = "Ano da publicação:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label6.Location = new System.Drawing.Point(12, 257);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(11, 10);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "Id";
             // 
             // nomeTextBox
             // 
@@ -166,7 +155,6 @@
             this.Controls.Add(this.editoraTextBox);
             this.Controls.Add(this.autorTextBox);
             this.Controls.Add(this.nomeTextBox);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -188,7 +176,6 @@
         private Label label3;
         private Label label4;
         private Label label5;
-        private Label label6;
         private TextBox nomeTextBox;
         private TextBox autorTextBox;
         private TextBox editoraTextBox;
