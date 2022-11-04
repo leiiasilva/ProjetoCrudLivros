@@ -1,12 +1,16 @@
+
 namespace ProjetoCrud
 {
     public partial class Form1 : Form
     {
-        private RepositorioDB repositorioComBanco = new RepositorioDB();
-        public Form1()
+       
+        private readonly IRepositorio _repositorio;
+        public Form1(IRepositorio repositorio)
         {
             InitializeComponent();
+            _repositorio = repositorio;
             AtualizarLista();
+            
         }
 
         private void AoClicarEmCadastrar(object sender, EventArgs e)
@@ -18,7 +22,7 @@ namespace ProjetoCrud
 
                 if (cadastro.DialogResult == DialogResult.OK)
                 {
-                    repositorioComBanco.Cadastrar(cadastro.livro);
+                    _repositorio.Cadastrar(cadastro.livro);
                     MessageBox.Show("Livro cadastrado com sucesso!", "Mensagem do sistema");
                 }
                 AtualizarLista();
@@ -44,7 +48,7 @@ namespace ProjetoCrud
                     if (cadastro.DialogResult == DialogResult.OK)
                     {
                         cadastro.livro.Codigo = livroASerEditado.Codigo;
-                        repositorioComBanco.Editar(cadastro.livro);
+                        _repositorio.Editar(cadastro.livro);
                         MessageBox.Show("Livro editado com sucesso!", "Mensagem do sistema");
                     }
                     AtualizarLista();
@@ -69,7 +73,7 @@ namespace ProjetoCrud
                     if (DesejaDeletarOLivro())
                     {
                         int livroASerDeletado = Convert.ToInt32(dataGridView1.CurrentRow.Cells[0].Value);
-                        repositorioComBanco.Deletar(livroASerDeletado);
+                        _repositorio.Deletar(livroASerDeletado);
                         AtualizarLista();
                     }
                 }
@@ -85,7 +89,8 @@ namespace ProjetoCrud
         }
         private void AtualizarLista()
         {
-            dataGridView1.DataSource = repositorioComBanco.BuscarTodos();
+            
+            dataGridView1.DataSource = _repositorio.BuscarTodos();
             dataGridView1.ClearSelection();
         }
 
