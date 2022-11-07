@@ -17,8 +17,6 @@ namespace ProjetoCrud
             var servicoProvider = host.Services;
             var repositorio = servicoProvider.GetService<IRepositorio>();
 
-
-
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
@@ -26,7 +24,9 @@ namespace ProjetoCrud
         }
         public static IHostBuilder CreateHostBuilder()
         {
-            return Host.CreateDefaultBuilder().ConfigureServices((context, services) => { services.AddScoped<IRepositorio, RepositorioDB>();});
+            return Host
+                .CreateDefaultBuilder()
+                .ConfigureServices((context, services) => { services.AddScoped<IRepositorio, RepositorioDB>(); });
         }
 
     }

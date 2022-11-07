@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using Dominio;
 
 namespace ProjetoCrud
 {
@@ -26,18 +25,18 @@ namespace ProjetoCrud
         {
             try
             {
-                if (nomeTextBox.Text.Equals(String.Empty) || autorTextBox.Text.Equals(String.Empty)
-                    || editoraTextBox.Text.Equals(String.Empty) || anoPublicacaodateTime.Value > DateTime.Now)
+                livro.Nome = nomeTextBox.Text;
+                livro.Autor = autorTextBox.Text;
+                livro.Editora = editoraTextBox.Text;
+                livro.AnoDaPublicacao = Convert.ToDateTime(anoPublicacaodateTime.Text);
+
+                if (Validacao.ValidarCampo(livro) == true)
                 {
-                    throw new Exception("Preencha todos os campos com valor válido.");
+                    DialogResult = DialogResult.OK;
                 }
                 else
                 {
-                    livro.Nome = nomeTextBox.Text;
-                    livro.Autor = autorTextBox.Text;
-                    livro.Editora = editoraTextBox.Text;
-                    livro.AnoDaPublicacao = Convert.ToDateTime(anoPublicacaodateTime.Text);
-                    DialogResult = DialogResult.OK;
+                    DialogResult = DialogResult.Cancel;
                 }
 
             }
