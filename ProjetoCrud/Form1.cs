@@ -1,4 +1,3 @@
-
 namespace ProjetoCrud
 {
     public partial class Form1 : Form
@@ -10,7 +9,6 @@ namespace ProjetoCrud
             InitializeComponent();
             _repositorio = repositorio;
             AtualizarLista();
-            
         }
 
         private void AoClicarEmCadastrar(object sender, EventArgs e)
