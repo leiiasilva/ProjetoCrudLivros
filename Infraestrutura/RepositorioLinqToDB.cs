@@ -14,6 +14,7 @@ namespace Infraestrutura
 {
     public class RepositorioLinqToDB : IRepositorio
     {
+
        public static string conexao()
         {
             return ConfigurationManager.ConnectionStrings["conexaoSql"].ConnectionString;
