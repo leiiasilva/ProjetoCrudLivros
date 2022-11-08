@@ -56,9 +56,9 @@ namespace ProjetoCrud
                     MessageBox.Show("Selecione um livro para editar", "Mensagem do sistema");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Não há livros para editar" + ex.Message, "Mensagem do sistema");
+                MessageBox.Show("Não há livros para editar" , "Mensagem do sistema");
             }
         }
 
@@ -82,7 +82,7 @@ namespace ProjetoCrud
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Não há livro para deletar" + ex.Message, "Mensagem do sistema");
+                MessageBox.Show("Não há livro para deletar" , "Mensagem do sistema");
             }
         }
         private void AtualizarLista()

@@ -15,7 +15,7 @@ namespace ProjetoCrud
                     Nome = tabela.Rows[i]["nome"].ToString(),
                     Autor = tabela.Rows[i]["autor"].ToString(),
                     Editora = tabela.Rows[i]["editora"].ToString(),
-                    AnoDaPublicacao = DateTime.Parse(tabela.Rows[i]["anopublicacao"].ToString())
+                    AnoPublicacao = DateTime.Parse(tabela.Rows[i]["anopublicacao"].ToString())
                 };
                 listaLivro.Add(livro);
             }

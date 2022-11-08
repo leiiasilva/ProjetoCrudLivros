@@ -1,50 +1,89 @@
-﻿using LinqToDB.Common;
-using LinqToDB.DataProvider.SqlCe;
-using LinqToDB.DataProvider.SqlServer;
+﻿using LinqToDB;
 using ProjetoCrud;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Xsl;
+using System.Data.SqlClient;
+using SqlServerTools = LinqToDB.DataProvider.SqlServer.SqlServerTools;
 
 namespace Infraestrutura
 {
     public class RepositorioLinqToDB : IRepositorio
     {
-
        public static string conexao()
         {
-            return ConfigurationManager.ConnectionStrings["conexaoSql"].ConnectionString;
+            var stringConexao = (ConfigurationManager.ConnectionStrings["conexaoSql"].ConnectionString);
+            return stringConexao;
         }
 
         public void Cadastrar(Livro livro)
         {
-            
-
-            throw new NotImplementedException();
+            using var bancoDeDados = SqlServerTools.CreateDataConnection(conexao());
+            try
+            {
+                bancoDeDados.Insert(livro);
+            }
+            catch(SqlException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+           
         }
 
         public void Deletar(int livroId)
         {
-            throw new NotImplementedException();
+            using var bancoDeDados = SqlServerTools.CreateDataConnection(conexao());
+            try
+            {
+                bancoDeDados.GetTable<Livro>().Where(x => x.Codigo == livroId).Delete();
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public void Editar(Livro livro)
+        public void Editar(Livro livroEditar)
         {
-            throw new NotImplementedException();
+            using var bancoDeDados = SqlServerTools.CreateDataConnection(conexao());
+            try
+            {
+                bancoDeDados.Update(livroEditar);
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public Livro BuscarPorId(int Id)
         {
-            throw new NotImplementedException();
+            using var bancoDeDados = SqlServerTools.CreateDataConnection(conexao());
+            try
+            {
+                {
+                    var livroBuscado = bancoDeDados.GetTable<Livro>().FirstOrDefault(x => x.Codigo == Id);
+                    return livroBuscado;
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public List<Livro> BuscarTodos()
         {
-            throw new NotImplementedException();
+            using var bancoDeDados = SqlServerTools.CreateDataConnection(conexao());
+            try
+            {
+                {
+                    var listaLivros = from Livro in bancoDeDados.GetTable<Livro>() select Livro;
+                    return listaLivros.ToList();
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

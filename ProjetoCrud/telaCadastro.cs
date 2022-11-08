@@ -28,7 +28,7 @@ namespace ProjetoCrud
                 livro.Nome = nomeTextBox.Text;
                 livro.Autor = autorTextBox.Text;
                 livro.Editora = editoraTextBox.Text;
-                livro.AnoDaPublicacao = Convert.ToDateTime(anoPublicacaodateTime.Text);
+                livro.AnoPublicacao = Convert.ToDateTime(anoPublicacaodateTime.Text);
 
                 if (Validacao.ValidarCampo(livro) == true)
                 {

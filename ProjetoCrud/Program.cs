@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-
+using Infraestrutura;
 
 namespace ProjetoCrud
 {
@@ -26,7 +26,7 @@ namespace ProjetoCrud
         {
             return Host
                 .CreateDefaultBuilder()
-                .ConfigureServices((context, services) => { services.AddScoped<IRepositorio, RepositorioDB>(); });
+                .ConfigureServices((context, services) => { services.AddScoped<IRepositorio, RepositorioLinqToDB>(); });
         }
 
     }
