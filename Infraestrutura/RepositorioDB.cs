@@ -31,7 +31,7 @@ namespace ProjetoCrud
                     comando.Parameters.AddWithValue("@nome", livro.Nome);
                     comando.Parameters.AddWithValue("@autor", livro.Autor);
                     comando.Parameters.AddWithValue("@editora", livro.Editora);
-                    comando.Parameters.AddWithValue("@anoPublicacao", livro.AnoDaPublicacao);
+                    comando.Parameters.AddWithValue("@anoPublicacao", livro.AnoPublicacao);
                     comando.ExecuteNonQuery();
                 }
                 catch (Exception ex)
@@ -52,7 +52,7 @@ namespace ProjetoCrud
                     comando.Parameters.AddWithValue("@nome", livro.Nome);
                     comando.Parameters.AddWithValue("@autor", livro.Autor);
                     comando.Parameters.AddWithValue("@editora", livro.Editora);
-                    comando.Parameters.AddWithValue("@anoPublicacao", livro.AnoDaPublicacao);
+                    comando.Parameters.AddWithValue("@anoPublicacao", livro.AnoPublicacao);
                     comando.ExecuteNonQuery();
                 }
                 catch (Exception ex)

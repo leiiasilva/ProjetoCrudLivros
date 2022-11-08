@@ -23,7 +23,7 @@ namespace Dominio
                 throw new Exception("O campo editora deve ser informado");
 
             }
-            if (livro.AnoDaPublicacao > DateTime.Now)
+            if (livro.AnoPublicacao > DateTime.Now)
             {
                 validacao = false;
                 throw new Exception("A data informada não é válida");
