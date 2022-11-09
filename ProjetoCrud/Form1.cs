@@ -1,3 +1,5 @@
+using System.Windows.Forms;
+
 namespace ProjetoCrud
 {
     public partial class Form1 : Form
@@ -58,7 +60,7 @@ namespace ProjetoCrud
             }
             catch (Exception)
             {
-                MessageBox.Show("Não há livros para editar" , "Mensagem do sistema");
+                MessageBox.Show("Não há livros para editar", "Mensagem do sistema");
             }
         }
 
@@ -82,7 +84,7 @@ namespace ProjetoCrud
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Não há livro para deletar" , "Mensagem do sistema");
+                MessageBox.Show("Não há livro para deletar", "Mensagem do sistema");
             }
         }
         private void AtualizarLista()
