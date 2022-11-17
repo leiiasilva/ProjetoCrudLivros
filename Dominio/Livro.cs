@@ -2,7 +2,7 @@
 
 namespace ProjetoCrud
 {
-    public class Livro
+    public class Livro 
     {
         [PrimaryKey, Identity]
         public int Codigo { get; set; }

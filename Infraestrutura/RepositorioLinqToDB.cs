@@ -4,13 +4,14 @@ using System.Configuration;
 using System.Data.SqlClient;
 using SqlServerTools = LinqToDB.DataProvider.SqlServer.SqlServerTools;
 
+
 namespace Infraestrutura
 {
     public class RepositorioLinqToDB : IRepositorio
     {
        public static string conexao()
         {
-            var stringConexao = (ConfigurationManager.ConnectionStrings["conexaoSql"].ConnectionString);
+            var stringConexao = ConfigurationManager.ConnectionStrings["conexaoSql"].ConnectionString;
             return stringConexao;
         }
 
@@ -60,8 +61,8 @@ namespace Infraestrutura
             try
             {
                 {
-                    var livroBuscado = bancoDeDados.GetTable<Livro>().FirstOrDefault(x => x.Codigo == Id);
-                    return livroBuscado;
+                    var livroASerBuscado = bancoDeDados.GetTable<Livro>().FirstOrDefault(x => x.Codigo == Id);
+                    return livroASerBuscado;
                 }
             }
             catch (SqlException ex)

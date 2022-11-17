@@ -82,7 +82,7 @@ namespace ProjetoCrud
                     MessageBox.Show("Selecione um livro para deletar", "Mensagem do sistema");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Não há livro para deletar", "Mensagem do sistema");
             }
