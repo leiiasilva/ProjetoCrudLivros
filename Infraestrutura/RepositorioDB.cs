@@ -10,7 +10,7 @@ namespace ProjetoCrud
         {
             try
             {
-                var stringConexao = (ConfigurationManager.ConnectionStrings["conexaoSql"].ConnectionString);
+                var stringConexao = ConfigurationManager.ConnectionStrings["conexaoSql"].ConnectionString;
                 var ConexaoDb = new SqlConnection(stringConexao);
                 ConexaoDb.Open();
                 return ConexaoDb;
