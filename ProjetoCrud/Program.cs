@@ -18,8 +18,8 @@ namespace ProjetoCrud
             
             DataBaseMigration.RunMigrations();
             var host = CreateHostBuilder().Build();
-            var servicoProvider = host.Services;
-            var repositorio = servicoProvider.GetService<IRepositorio>();
+            var serviceProvider = host.Services;
+            var repositorio = serviceProvider.GetService<IRepositorio>();
             
            
 
@@ -32,7 +32,7 @@ namespace ProjetoCrud
         {
             return Host
                 .CreateDefaultBuilder()
-                .ConfigureServices((context, services) => { services.AddScoped<IRepositorio, RepositorioLinqToDB>();
+                .ConfigureServices((context, services) => { services.AddScoped<IRepositorio, RepositorioDB>();
                    
 
                 });
