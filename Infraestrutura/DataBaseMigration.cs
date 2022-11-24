@@ -14,6 +14,7 @@ namespace Infraestrutura
             }
         }
 
+
         private static IServiceProvider CreateService()
         {
             return new ServiceCollection()
