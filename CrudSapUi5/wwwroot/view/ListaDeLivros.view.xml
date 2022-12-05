@@ -1,0 +1,70 @@
+<mvc:View
+		controllerName="sap.ui.demo.walkthrough.controller.ListaDeLivros"
+		xmlns="sap.m"
+		xmlns:mvc="sap.ui.core.mvc">
+	<Table
+		id="ListaDeLivros"
+		class="sapUiResponsiveMargin"
+		width="auto"
+		items="{
+			path : 'listaDeLivros',
+			sorter : {
+				path : 'LivroEditora',
+				group : true
+			}
+		}">
+		<headerToolbar>
+			<Toolbar>
+				<Button
+					id="botaoCadastrar"
+					icon="sap-icon://create-form"
+					text="{i18n>botaoCadastrar}"
+					press=".onOpenDialog"
+					class="sapUiSmallMarginEnd"/>
+				<ToolbarSpacer/>
+				<SearchField width="50%" search=".onFilterListaDeLivros"/>
+			</Toolbar>
+		</headerToolbar>
+		<columns>
+			<Column
+				minScreenWidth="Small"
+				demandPopin="true"
+				width="10em">
+				<Text text="{i18n>colunaID}"/>
+			</Column>
+			<Column>
+				<Text text="{i18n>colunaNome}"/>
+			</Column>
+			<Column
+				minScreenWidth="Small"
+				demandPopin="true">
+				<Text text="{i18n>colunaAutor}"/>
+			</Column>
+			<Column
+				minScreenWidth="Tablet"
+				demandPopin="false">
+				<Text text="{i18n>colunaEditora}"/>
+			</Column>
+			<Column
+				hAlign="">
+				<Text text="{i18n>colunaAnoPublicacao}"/>
+			</Column>
+		</columns>
+		<items>
+			<ColumnListItem
+				type="Navigation"
+				press=".onPress">
+				<cells>
+					<ObjectNumber number="{listaDeLivros>Código}" emphasized="false"/>
+					<ObjectIdentifier title="{listaDeLivros>NomeLivro}"/>
+					<Text text="{
+						path: 'listaDeLivros>Status',
+						formatter: '.formatter.statusText'
+					}"/>
+					<Text text="{listaDeLivros>LivroEditora}"/>
+				</cells>
+			</ColumnListItem>
+		</items>
+	</Table>
+
+</mvc:View>
