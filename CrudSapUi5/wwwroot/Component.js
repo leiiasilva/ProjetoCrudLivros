@@ -11,7 +11,7 @@ sap.ui.define([
            interfaces: ["sap.ui.core.IAsyncContentCreation"],
            manifest: "json"
      },
-      //A função init do componente é invocada automaticamente pelo OpenUI5 quando o componente é instanciado.
+      //A função init do componente é ocada automaticamente pelo OpenUI5 quando o componente é instanciado.
       init : function () {
          
          UIComponent.prototype.init.apply(this, arguments);

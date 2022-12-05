@@ -1,13 +1,13 @@
 <mvc:View
-		controllerName="sap.ui.demo.walkthrough.controller.InvoiceList"
+		controllerName="sap.ui.demo.walkthrough.controller.ListaDeLivros"
 		xmlns="sap.m"
 		xmlns:mvc="sap.ui.core.mvc">
 	<Table
-		id="invoiceList"
+		id="listaDeLivros"
 		class="sapUiResponsiveMargin"
 		width="auto"
 		items="{
-			path : 'invoice>/InvoiceList',
+			path : 'listaDeLivro>/ListaDeLivros',
 			sorter : {
 				path : 'LivroEditora',
 				group : true
@@ -22,7 +22,7 @@
 					press=".onOpenDialog"
 					class="sapUiSmallMarginEnd"/>
 				<ToolbarSpacer/>
-				<SearchField width="50%" search=".onFilterInvoiceList"/>
+				<SearchField width="50%" search=".onFilterListaDeLivros"/>
 			</Toolbar>
 		</headerToolbar>
 		<columns>
