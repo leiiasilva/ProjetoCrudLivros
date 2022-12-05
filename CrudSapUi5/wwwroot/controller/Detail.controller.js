@@ -5,11 +5,11 @@
 // ], function (Controller, History, MessageToast) {
 // 	"use strict";
 
-// 	return Controller.extend("sap.ui.demo.walkthrough.controller.TelaDeCadastro", {
+// 	return Controller.extend("sap.ui.demo.walkthrough.controller.Detail", {
 
 // 		onInit: function () {
 // 			var oRouter = this.getOwnerComponent().getRouter();
-// 			oRouter.getRoute("telaCadastro").attachPatternMatched(this._onObjectMatched, this);
+// 			oRouter.getRoute("detail").attachPatternMatched(this._onObjectMatched, this);
 // 		},
 
 // 		_onObjectMatched: function (oEvent) {

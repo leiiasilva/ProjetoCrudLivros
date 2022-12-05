@@ -1,4 +1,4 @@
-﻿//contem a configuração da aplicação 
+//contem a configuração da aplicação 
 sap.ui.define([
    "sap/ui/core/UIComponent", //Nosso componente herda da classe base sap.ui.core.UIComponent
    "sap/ui/model/json/JSONModel"
