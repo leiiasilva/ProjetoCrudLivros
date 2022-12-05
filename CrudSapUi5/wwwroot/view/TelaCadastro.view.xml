@@ -1,0 +1,12 @@
+<!-- <mvc:View
+	controllerName="sap.ui.demo.walkthrough.controller.TelaCadastro"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:wt="sap.ui.demo.walkthrough.control">
+	<Page
+		title="{i18n>telaCadastro}"
+		showNavButton="true"
+		navButtonPress=".onNavBack">
+		<ObjectHeader/>
+	</Page>
+</mvc:View> -->
