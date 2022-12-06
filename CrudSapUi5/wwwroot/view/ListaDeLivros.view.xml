@@ -3,11 +3,11 @@
 		xmlns="sap.m"
 		xmlns:mvc="sap.ui.core.mvc">
 	<Table
-		id="ListaDeLivros"
+		id="listaDeLivros"
 		class="sapUiResponsiveMargin"
 		width="auto"
 		items="{
-			path : 'listaDeLivros',
+			path : 'listaDeLivros>/ListaDeLivros',
 			sorter : {
 				path : 'LivroEditora',
 				group : true
@@ -15,12 +15,8 @@
 		}">
 		<headerToolbar>
 			<Toolbar>
-				<Button
-					id="botaoCadastrar"
-					icon="sap-icon://create-form"
-					text="{i18n>botaoCadastrar}"
-					press=".onOpenDialog"
-					class="sapUiSmallMarginEnd"/>
+				<Button type="Navigation" class="sapUiSmallMarginEnd" id="botaoCadastrar" icon="sap-icon://create-form"
+					text="{i18n>botaoCadastrar}" press=".onPress"/>
 				<ToolbarSpacer/>
 				<SearchField width="50%" search=".onFilterListaDeLivros"/>
 			</Toolbar>
@@ -55,13 +51,8 @@
 				type="Navigation"
 				press=".onPress">
 				<cells>
-					<ObjectNumber number="{listaDeLivros>Código}" emphasized="false"/>
-					<ObjectIdentifier title="{listaDeLivros>NomeLivro}"/>
-					<Text text="{
-						path: 'listaDeLivros>Status',
-						formatter: '.formatter.statusText'
-					}"/>
-					<Text text="{listaDeLivros>LivroEditora}"/>
+					
+					
 				</cells>
 			</ColumnListItem>
 		</items>

@@ -1,4 +1,4 @@
-﻿{
+{
 	"_version": "1.21.0",
 	"sap.app": {
 		"id": "sap.ui.demo.walkthrough",
@@ -45,11 +45,10 @@
 					"bundleName": "sap.ui.demo.walkthrough.i18n.i18n",
 					"supportedLocales": [
 						""
-					]
-					
+					],
+					"fallbackLocale": ""
 				}
 			}
-			
 		},
 		
 		"routing": {
@@ -68,7 +67,7 @@
 					"target": "overview"
 				},
 				{
-					"pattern": "telaCadastro/{}",
+					"pattern": "telaCadastro",
 					"name": "telaCadastro",
 					"target": "telaCadastro"
 				}
