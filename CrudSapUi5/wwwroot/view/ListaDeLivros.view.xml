@@ -7,7 +7,7 @@
 		class="sapUiResponsiveMargin"
 		width="auto"
 		items="{
-			path : 'listaDeLivro>/ListaDeLivros',
+			path : 'listaDeLivros>/ListaDeLivros',
 			sorter : {
 				path : 'LivroEditora',
 				group : true
@@ -15,12 +15,8 @@
 		}">
 		<headerToolbar>
 			<Toolbar>
-				<Button
-					id="botaoCadastrar"
-					icon="sap-icon://create-form"
-					text="{i18n>botaoCadastrar}"
-					press=".onOpenDialog"
-					class="sapUiSmallMarginEnd"/>
+				<Button type="Navigation" class="sapUiSmallMarginEnd" id="botaoCadastrar" icon="sap-icon://create-form"
+					text="{i18n>botaoCadastrar}" press=".onPress"/>
 				<ToolbarSpacer/>
 				<SearchField width="50%" search=".onFilterListaDeLivros"/>
 			</Toolbar>

@@ -5,7 +5,7 @@ sap.ui.define([
 ], function (Controller, History, MessageToast) {
 	"use strict";
 
-	return Controller.extend("sap.ui.demo.walkthrough.controller.telaCadastro", {
+	return Controller.extend("sap.ui.demo.walkthrough.controller.Detail", {
 
 		onInit: function () {
 			var oRouter = this.getOwnerComponent().getRouter();
@@ -13,10 +13,10 @@ sap.ui.define([
 		},
 
 		_onObjectMatched: function (oEvent) {
-            this.byId("rating").reset();
+            this.byId("telaCadastro").reset();
 			this.getView().bindElement({
-				path: "/" + window.decodeURIComponent(oEvent.getParameter("arguments").listaDeLivroPath),
-				model: "listaDeLivro"
+				path: "/" + window.decodeURIComponent(oEvent.getParameter("arguments").invoicePath),
+				model: "invoice"
 			});
 		},
 
@@ -30,12 +30,6 @@ sap.ui.define([
 				var oRouter = this.getOwnerComponent().getRouter();
 				oRouter.navTo("overview", {}, true);
 			}
-		},
-        onRatingChange: function (oEvent) {
-			var fValue = oEvent.getParameter("value");
-			var oResourceBundle = this.getView().getModel("i18n").getResourceBundle();
-
-			MessageToast.show(oResourceBundle.getText("ratingConfirmation", [fValue]));
 		}
 
 	});

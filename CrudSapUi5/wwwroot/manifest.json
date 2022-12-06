@@ -67,7 +67,7 @@
 					"target": "overview"
 				},
 				{
-					"pattern": "telaCadastro/{listaDeLivroPath}",
+					"pattern": "telaCadastro",
 					"name": "telaCadastro",
 					"target": "telaCadastro"
 				}
