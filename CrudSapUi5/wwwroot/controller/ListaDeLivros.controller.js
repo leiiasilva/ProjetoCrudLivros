@@ -13,8 +13,8 @@ sap.ui.define([
 		onPress : function (oEvent){ //ao clicar no botão cadastrar
 
 			var oRouter = this.getOwnerComponent().getRouter();
-			oRouter.navTo("TelaCadastro");
-			//alert("funcionou")
+			oRouter.navTo("telaCadastro");
+			
 		}
 
 

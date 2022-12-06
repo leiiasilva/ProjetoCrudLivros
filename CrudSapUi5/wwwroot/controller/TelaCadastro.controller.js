@@ -7,18 +7,18 @@ sap.ui.define([
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.Detail", {
 
-		onInit: function () {
-			var oRouter = this.getOwnerComponent().getRouter();
-			oRouter.getRoute("telaCadastro").attachPatternMatched(this._onObjectMatched, this);
-		},
+		// onInit: function () {
+		// 	var oRouter = this.getOwnerComponent().getRouter();
+		// 	oRouter.getRoute("telaCadastro").attachPatternMatched(this._onObjectMatched, this);
+		// },
 
-		_onObjectMatched: function (oEvent) {
-            this.byId("telaCadastro").reset();
-			this.getView().bindElement({
-				path: "/" + window.decodeURIComponent(oEvent.getParameter("arguments").invoicePath),
-				model: "invoice"
-			});
-		},
+		// _onObjectMatched: function (oEvent) {
+        //     this.byId("telaCadastro").reset();
+		// 	this.getView().bindElement({
+		// 		path: "/" + window.decodeURIComponent(oEvent.getParameter("arguments").invoicePath),
+		// 		model: "invoice"
+		// 	});
+		// },
 
 		onNavBack: function () {
 			var oHistory = History.getInstance();
