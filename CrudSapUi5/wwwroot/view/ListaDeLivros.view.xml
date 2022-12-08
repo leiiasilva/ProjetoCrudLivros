@@ -15,10 +15,11 @@
 		}">
 		<headerToolbar>
 			<Toolbar>
-				<Button type="Navigation" class="sapUiSmallMarginEnd" id="botaoCadastrar" icon="sap-icon://create-form"
-					text="{i18n>botaoCadastrar}" press=".onPress"/>
+			<SearchField width="30%" search=".onFilterListaDeLivros"/>
 				<ToolbarSpacer/>
-				<SearchField width="50%" search=".onFilterListaDeLivros"/>
+				<Button type="Navigation"  icon="sap-icon://create-form" text="Cadastrar" press=".botaoCadastrar"/>
+				<Button type="Navigation" text="Editar"  press=".botaoEditar" icon="sap-icon://edit" />
+				<Button type="Navigation" text="Deletar"  press=".botaoDeletar" icon="sap-icon://delete" />
 			</Toolbar>
 		</headerToolbar>
 		<columns>

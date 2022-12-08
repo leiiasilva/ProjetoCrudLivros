@@ -9,12 +9,17 @@ sap.ui.define([
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.ListaDeLivros", {
       
-		
-		onPress : function (oEvent){ //ao clicar no botão cadastrar
-
+		botaoCadastrar : function (){ //ao clicar no botão cadastrar
 			var oRouter = this.getOwnerComponent().getRouter();
 			oRouter.navTo("telaCadastro");
-			
+		},
+
+		botaoEditar: function(){
+			alert("configurar botão");
+		}, 
+
+		botaoDeletar: function(){
+			alert("configurar botão");
 		}
 
 

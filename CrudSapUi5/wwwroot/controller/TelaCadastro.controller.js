@@ -7,6 +7,9 @@ sap.ui.define([
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.TelaCadastro", {
 
+		// var url= fetch(`https://localhost:7278/CrudLivro ${id}`).then(response=> response.json()).then(data => console.log(data));
+		// console.log(url);
+
 		onNavBack: function () {
 			var oHistory = History.getInstance();
 			var sPreviousHash = oHistory.getPreviousHash();
@@ -19,11 +22,9 @@ sap.ui.define([
 			}
 		}, 
 
-
-		botaoSalvar: function(){
-			//alert("funcionou");
-			var oHistory = History.getInstance();
-			window.history.go(-1);
+		botaoSalvar: function(ListaDeLivros){
+			alert("configurar botão");
+			
 		},
 
 		botaoVoltar: function(){
