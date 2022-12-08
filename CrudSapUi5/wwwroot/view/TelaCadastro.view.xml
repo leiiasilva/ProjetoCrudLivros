@@ -1,12 +1,48 @@
 <mvc:View
 	controllerName="sap.ui.demo.walkthrough.controller.TelaCadastro"
 	xmlns="sap.m"
+	xmlns:l="sap.ui.layout"
 	xmlns:mvc="sap.ui.core.mvc">
 	<Page
-		title="{i18n>telaCadastroPageTitle}">
-		<ObjectHeader
-			title=""/>
-			
+		title="{i18n>telaCadastroPageTitle}"
+		showNavButton="true"
+		navButtonPress=".onNavBack">
+			<l:VerticalLayout class="sapUiContentPadding" width="50%">
+		<Label text="Nome" labelFor="inputNome" />
+		<Input
+			id="inputNome"
+			required="true"
+			placeholder="Digite o nome do livro"
+			class="sapUiSmallMarginBottom" />
+
+		<Label text="Autor" labelFor="inputAutor" />
+		<Input
+			id="inputAutor"
+			required="true"
+			placeholder="Digite o nome do autor"
+			class="sapUiSmallMarginBottom" />
+
+		<Label text="Editora" labelFor="inputEditora" />
+		<Input
+			id="inputEditora"
+			required="true"
+			placeholder="Digite o nome da editora"
+			class="sapUiSmallMarginBottom" />
+
+		<Label text="Ano Publicação" labelFor="AnoPublicacao"/>
+		<DateTimeInput
+			id="AnoPublicacao"
+			required="true"
+			placeholder="DD/MM/AAAA"
+			class="sapUiSmallMarginBottom" />
+		<l:HorizontalLayout
+            class="sapUiContentPadding">
+        	<l:content>            
+                <Button text="Salvar" press=".botaoSalvar"></Button>
+                <Button text="Voltar" press=".botaoVoltar"></Button>          
+            </l:content>
+        </l:HorizontalLayout>
+	</l:VerticalLayout>
 	</Page>
 </mvc:View>
 
