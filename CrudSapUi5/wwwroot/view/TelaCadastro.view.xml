@@ -11,29 +11,38 @@
 		<Label text="Nome" labelFor="inputNome" />
 		<Input
 			id="inputNome"
+			required="true"
 			placeholder="Digite o nome do livro"
 			class="sapUiSmallMarginBottom" />
 
 		<Label text="Autor" labelFor="inputAutor" />
 		<Input
 			id="inputAutor"
+			required="true"
 			placeholder="Digite o nome do autor"
 			class="sapUiSmallMarginBottom" />
 
 		<Label text="Editora" labelFor="inputEditora" />
 		<Input
 			id="inputEditora"
+			required="true"
 			placeholder="Digite o nome da editora"
 			class="sapUiSmallMarginBottom" />
 
-		<Label text="Date" labelFor="DTI1"/>
+		<Label text="Ano Publicação" labelFor="AnoPublicacao"/>
 		<DateTimeInput
-			id="DTI1"
-			type="Date"
-			placeholder="Enter Date"
+			id="AnoPublicacao"
+			required="true"
+			placeholder="DD/MM/AAAA"
 			class="sapUiSmallMarginBottom" />
+		<l:HorizontalLayout
+            class="sapUiContentPadding">
+        	<l:content>            
+                <Button text="Salvar" press=".botaoSalvar"></Button>
+                <Button text="Voltar" press=".botaoVoltar"></Button>          
+            </l:content>
+        </l:HorizontalLayout>
 	</l:VerticalLayout>
-			
 	</Page>
 </mvc:View>
 

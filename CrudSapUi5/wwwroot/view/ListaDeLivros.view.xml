@@ -23,6 +23,7 @@
 		</headerToolbar>
 		<columns>
 			<Column
+				id="tabelaLivros"
 				minScreenWidth="Small"
 				demandPopin="true"
 				width="10em">
