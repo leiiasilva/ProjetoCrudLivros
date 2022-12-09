@@ -6,6 +6,7 @@
 		id="listaDeLivros"
 		class="sapUiResponsiveMargin"
 		width="auto"
+		mode="MultiSelect"
 		items="{
 			path : 'listaDeLivros>/ListaDeLivros',
 			sorter : {
@@ -20,6 +21,7 @@
 				<Button type="Navigation"  icon="sap-icon://create-form" text="Cadastrar" press=".botaoCadastrar"/>
 				<Button type="Navigation" text="Editar"  press=".botaoEditar" icon="sap-icon://edit" />
 				<Button type="Navigation" text="Deletar"  press=".botaoDeletar" icon="sap-icon://delete" />
+				
 			</Toolbar>
 		</headerToolbar>
 		<columns>
