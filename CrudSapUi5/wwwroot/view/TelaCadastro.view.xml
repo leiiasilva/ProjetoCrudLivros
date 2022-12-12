@@ -4,8 +4,18 @@
 	xmlns:l="sap.ui.layout"
 	xmlns:mvc="sap.ui.core.mvc">
 	<Page
-		title="{i18n>telaCadastroPageTitle}">
-			<l:VerticalLayout class="sapUiContentPadding" width="50%">
+		title="{i18n>telaCadastroPageTitle}"
+		showNavButton="true"
+		navButtonPress=".botaoVoltar">
+
+	<headerContent>
+	 
+		<Button text="Editar"  press=".botaoEditar" icon="sap-icon://edit" />
+		<Button text="Deletar"  press=".botaoDeletar" icon="sap-icon://delete" />
+
+	</headerContent>
+
+		<l:VerticalLayout class="sapUiContentPadding" width="50%">
 		<Label text="Nome" labelFor="inputNome" />
 		<Input
 			id="inputNome"
@@ -30,14 +40,12 @@
 		<Label text="Ano Publicação" labelFor="AnoPublicacao"/>
 		<DateTimeInput
 			id="AnoPublicacao"
-			required="true"
 			placeholder="DD/MM/AAAA"
 			class="sapUiSmallMarginBottom" />
 		<l:HorizontalLayout
             class="sapUiContentPadding">
         	<l:content>            
-                <Button text="Salvar" press=".botaoSalvar"></Button>
-                <Button text="Voltar" press=".botaoVoltar"></Button>          
+                <Button text="Salvar" press=".botaoSalvar"></Button>        
             </l:content>
         </l:HorizontalLayout>
 	</l:VerticalLayout>
