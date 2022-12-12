@@ -27,6 +27,7 @@ sap.ui.define([
 		botaoCadastrar : function (){ //ao clicar no botão cadastrar
 			var oRouter = this.getOwnerComponent().getRouter();
 			oRouter.navTo("telaCadastro");
+			
 		},
 
 		buscarLivros: function (){
