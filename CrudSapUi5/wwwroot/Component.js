@@ -1,21 +1,15 @@
-//contem a configuração da aplicação 
 sap.ui.define([
-   "sap/ui/core/UIComponent", //Nosso componente herda da classe base sap.ui.core.UIComponent
-   "sap/ui/model/json/JSONModel"
-   
-
-], function (UIComponent, JSONModel) {
+   "sap/ui/core/UIComponent"
+], function (UIComponent) {
    "use strict";
    return UIComponent.extend("sap.ui.demo.walkthrough.Component", {
-       metadata : {
-           interfaces: ["sap.ui.core.IAsyncContentCreation"],
-           manifest: "json"
-     },
-     
+      metadata : {
+         "interfaces": ["sap.ui.core.IAsyncContentCreation"],
+         manifest: "json"
+      },
       init : function () {
          UIComponent.prototype.init.apply(this, arguments);
          this.getRouter().initialize();
-
-       }
+      }
    });
 });

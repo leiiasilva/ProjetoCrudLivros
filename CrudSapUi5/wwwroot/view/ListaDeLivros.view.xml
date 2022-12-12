@@ -6,7 +6,6 @@
 		id="listaDeLivros"
 		class="sapUiResponsiveMargin"
 		width="auto"
-		mode="MultiSelect"
 		items="{
 			path : 'listaDeLivros>/ListaDeLivros',
 			sorter : {
@@ -18,10 +17,7 @@
 			<Toolbar>
 			<SearchField width="30%" search=".onFilterListaDeLivros"/>
 				<ToolbarSpacer/>
-				<Button type="Navigation"  icon="sap-icon://create-form" text="Cadastrar" press=".botaoCadastrar"/>
-				<Button type="Navigation" text="Editar"  press=".botaoEditar" icon="sap-icon://edit" />
-				<Button type="Navigation" text="Deletar"  press=".botaoDeletar" icon="sap-icon://delete" />
-				
+				<Button icon="sap-icon://create-form" text="Cadastrar" press=".botaoCadastrar"/>
 			</Toolbar>
 		</headerToolbar>
 		<columns>
@@ -45,8 +41,7 @@
 				demandPopin="false">
 				<Text text="{i18n>colunaEditora}"/>
 			</Column>
-			<Column
-				hAlign="">
+			<Column>
 				<Text text="{i18n>colunaAnoPublicacao}"/>
 			</Column>
 		</columns>
@@ -54,10 +49,6 @@
 			<ColumnListItem
 				type="Navigation"
 				press=".onPress">
-				<cells>
-					
-					
-				</cells>
 			</ColumnListItem>
 		</items>
 	</Table>
