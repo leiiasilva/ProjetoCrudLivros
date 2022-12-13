@@ -65,6 +65,11 @@
 			"target": "overview"
 		  },
 		  {
+			"pattern": "detalhes",
+			"name": "detalhes",
+			"target": "detalhes"
+		  },
+		  {
 			"pattern": "telaCadastro",
 			"name": "telaCadastro",
 			"target": "telaCadastro"
@@ -74,6 +79,10 @@
 		  "overview": {
 			"id": "overview",
 			"name": "Overview"
+		  },
+		  "detalhes": {
+			"id": "detalhes",
+			"name": "Detalhes"
 		  },
 		  "telaCadastro": {
 			"id": "telaCadastro",

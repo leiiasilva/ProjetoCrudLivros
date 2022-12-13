@@ -32,6 +32,8 @@ sap.ui.define([
 			
 		// },
 
+
+
 		botaoVoltar: function(){
 			var oHistory = History.getInstance();
 			var sPreviousHash = oHistory.getPreviousHash();
