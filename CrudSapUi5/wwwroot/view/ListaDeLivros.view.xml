@@ -7,7 +7,7 @@
 		class="sapUiResponsiveMargin"
 		width="auto"
 		items="{
-			path : 'listaDeLivros>/ListaDeLivros',
+			path : 'listaDeLivros>/',
 			sorter : {
 				path : 'LivroEditora',
 				group : true
@@ -49,6 +49,19 @@
 			<ColumnListItem
 				type="Navigation"
 				press=".onPress">
+				<cells>
+					<Text text="{listaDeLivros>codigo}"/>
+					<Text text="{listaDeLivros>nome}"/>
+					<Text text="{listaDeLivros>autor}"/>
+					<Text text="{listaDeLivros>editora}"/>
+
+					<!-- <Text text="{
+						path: 'invoice>Status',
+						formatter: '.formatter.statusText'
+					}"/> -->
+					
+				</cells>
+
 			</ColumnListItem>
 		</items>
 	</Table>
