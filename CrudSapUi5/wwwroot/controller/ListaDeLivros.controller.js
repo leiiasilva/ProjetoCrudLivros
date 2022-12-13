@@ -43,6 +43,11 @@ sap.ui.define([
 			oRouter.navTo("telaCadastro");
 		},
 		
+		onPress: function () {
+			
+			var oRouter = this.getOwnerComponent().getRouter();
+			oRouter.navTo("detalhes");
+		}
 
 	});
 });

@@ -80,6 +80,10 @@
 			"id": "overview",
 			"name": "Overview"
 		  },
+		  "detalhes": {
+			"id": "detalhes",
+			"name": "Detalhes"
+		  },
 		  "telaCadastro": {
 			"id": "telaCadastro",
 			"name": "TelaCadastro"

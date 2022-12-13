@@ -54,11 +54,10 @@
 					<Text text="{listaDeLivros>nome}"/>
 					<Text text="{listaDeLivros>autor}"/>
 					<Text text="{listaDeLivros>editora}"/>
-
-					<!-- <Text text="{
-						path: 'invoice>Status',
-						formatter: '.formatter.statusText'
-					}"/> -->
+					<Text text="{
+						path: 'listaDeLivros>anoPublicacao'
+						
+					}"/>
 					
 				</cells>
 
