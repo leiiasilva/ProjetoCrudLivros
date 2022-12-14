@@ -57,6 +57,7 @@
 					<Text text="{
 						path: 'listaDeLivros>anoPublicacao'
 						
+						
 					}"/>
 					
 				</cells>
