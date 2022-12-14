@@ -13,6 +13,42 @@
 		<Button text="Deletar"  press=".botaoDeletar" icon="sap-icon://delete" />
 	
 	</headerContent>
+
+	<l:VerticalLayout
+	class="sapUiContentPadding"
+	width="70%">
+	
+	
+	<l:content>
+		<List>
+			<DisplayListItem
+				label="Código"
+				value="{livro>/codigo}" />
+			<DisplayListItem
+				label="Nome"
+				value="{livro>/nome}" />
+			<DisplayListItem
+				label="Autor"
+				value="{livro>/autor}" />
+			<DisplayListItem
+				label="Editora"
+				value="{livro>/editora}" />
+			<DisplayListItem
+				label="Ano Publicacao"
+				value="{
+					path: 'livro>/anoPublicacao',
+					type: 'sap.ui.model.type.Date',
+					formatOptions: {
+					  style: 'long',
+					  source: {
+						pattern: 'yyyy-MM-ddTHH:mm:ss'
+					  }
+					}
+				  }"/>
+		</List>
+
+	</l:content>
+</l:VerticalLayout>
 	
 </Page>
 </mvc:View>

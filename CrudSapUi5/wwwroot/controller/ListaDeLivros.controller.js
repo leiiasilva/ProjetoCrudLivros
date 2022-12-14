@@ -24,7 +24,6 @@ sap.ui.define([
 			 await fetch(`https://localhost:7278/CrudLivro`)
 			.then(response => response.json())
 			.then(data => livroASerBuscado = data)
-			
 			return livroASerBuscado;
 		},
 
@@ -43,10 +42,12 @@ sap.ui.define([
 			oRouter.navTo("telaCadastro");
 		},
 		
-		onPress: function () {
-			
+		onPress: function (oEvent) {
+			var oItem = oEvent.getSource();
 			var oRouter = this.getOwnerComponent().getRouter();
-			oRouter.navTo("detalhes");
+			oRouter.navTo("detalhes", {
+				id: window.encodeURIComponent(oItem.getBindingContext("livro"))
+			});
 		}
 
 	});
