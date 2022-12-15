@@ -15,16 +15,17 @@ sap.ui.define([
 		},
 		
 		ajustarRota: function (oEvent) {
-			var mostrarDetalhes = window.decodeURIComponent(oEvent.getParameter("arguments").id);
+			var mostrarDetalhes = oEvent.getParameter("arguments").id;
 			this.mostrarLista(mostrarDetalhes);
 		},
 
 		buscarLivro: function (livroBuscado) {
-			let livroASerBuscado = fetch(`https://localhost:7278/CrudLivro/  `)
-				.then((response) => response.json())
+			let livroASerBuscado = fetch(`https://localhost:7278/CrudLivro/${livroBuscado}`)
+			 	.then((response) => response.json())
 				.then(data => livroASerBuscado = data)
 			return livroASerBuscado;
 
+			
 		},
 		mostrarLista: function (livroBuscado) {
 			var exibirLista = this.buscarLivro(livroBuscado)

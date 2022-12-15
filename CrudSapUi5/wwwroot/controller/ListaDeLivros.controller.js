@@ -11,11 +11,12 @@ sap.ui.define([
 		onInit: function () {
 			this.getOwnerComponent();
 			var oRouter = this.getOwnerComponent().getRouter();
-			oRouter.getRoute("overview").attachPatternMatched(this.ajustarRota, this); //só será acionado para a rota que tiver um padrão correspondente
+			oRouter.getRoute("overview").attachPatternMatched(this.ajustarRota, this); 
 		},
 		
 		ajustarRota: function () {
 			this.mostrarLista();
+			
 		},
 
 
@@ -37,16 +38,17 @@ sap.ui.define([
 				
 
 		},
-		botaoCadastrar : function (){ //ao clicar no botão cadastrar
+		botaoCadastrar : function (oEvent){ //ao clicar no botão cadastrar
+			var oItem = oEvent.getSource();
 			var oRouter = this.getOwnerComponent().getRouter();
-			oRouter.navTo("telaCadastro");
+			oRouter.navTo("telaCadastro")
 		},
 		
 		onPress: function (oEvent) {
 			var oItem = oEvent.getSource();
 			var oRouter = this.getOwnerComponent().getRouter();
 			oRouter.navTo("detalhes", {
-				id: window.encodeURIComponent(oItem.getBindingContext("livro"))
+				id: window.encodeURIComponent(oItem.getBindingContext("listaDeLivros").getProperty("codigo"))
 			});
 		}
 

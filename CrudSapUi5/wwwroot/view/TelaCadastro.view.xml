@@ -8,13 +8,6 @@
 		showNavButton="true"
 		navButtonPress=".botaoVoltar">
 
-	<headerContent>
-	 
-		<Button text="Editar"  press=".botaoEditar" icon="sap-icon://edit" />
-		<Button text="Deletar"  press=".botaoDeletar" icon="sap-icon://delete" />
-
-	</headerContent>
-
 		<l:VerticalLayout class="sapUiContentPadding" width="50%">
 		<Label text="Nome" labelFor="inputNome" />
 		<Input
