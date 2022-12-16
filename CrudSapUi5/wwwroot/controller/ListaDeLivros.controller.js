@@ -38,8 +38,7 @@ sap.ui.define([
 				
 
 		},
-		botaoCadastrar : function (oEvent){ //ao clicar no botão cadastrar
-			var oItem = oEvent.getSource();
+		botaoCadastrar : function (){ //ao clicar no botão cadastrar
 			var oRouter = this.getOwnerComponent().getRouter();
 			oRouter.navTo("telaCadastro")
 		},
