@@ -73,6 +73,11 @@
 			"pattern": "telaCadastro",
 			"name": "telaCadastro",
 			"target": "telaCadastro"
+		  },
+		  {
+			"pattern": "telaCadastro/{id}",
+			"name": "editarLivro",
+			"target": "telaCadastro"
 		  }
 		],
 		"targets": {
