@@ -12,6 +12,7 @@
 		<Label text="Nome" labelFor="inputNome" />
 		<Input
 			id="inputNome"
+			value="{livro>/nome}"
 			required="true"
 			placeholder="Digite o nome do livro"
 			class="sapUiSmallMarginBottom" />
@@ -19,6 +20,7 @@
 		<Label text="Autor" labelFor="inputAutor" />
 		<Input
 			id="inputAutor"
+			value="{livro>/autor}"
 			required="true"
 			placeholder="Digite o nome do autor"
 			class="sapUiSmallMarginBottom" />
@@ -26,6 +28,7 @@
 		<Label text="Editora" labelFor="inputEditora" />
 		<Input
 			id="inputEditora"
+			value="{livro>/editora}"
 			required="true"
 			placeholder="Digite o nome da editora"
 			class="sapUiSmallMarginBottom" />
@@ -33,6 +36,8 @@
 		<Label text="Ano Publicação" labelFor="AnoPublicacao"/>
 		<DateTimeInput
 			id="AnoPublicacao"
+			value="{livro>/anoPublicacao}"
+			valueFormat="yyyy-MM-ddTHH:mm:ss"
 			placeholder="DD/MM/AAAA"
 			class="sapUiSmallMarginBottom" />
 		<l:HorizontalLayout
