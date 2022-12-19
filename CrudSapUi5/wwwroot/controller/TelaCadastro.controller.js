@@ -20,7 +20,7 @@ sap.ui.define([
 			// router.attachRoutePatternMatched(this.ajustarRota, this);
 		},
 
-		ajustarRotaCriacao: function(oEvent){
+		ajustarRotaCriacao: function(){
 			this.getView().setModel(new sap.ui.model.json.JSONModel({}), "livro");
 
 		},
