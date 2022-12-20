@@ -1,9 +1,10 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/core/routing/History",
-	"sap/ui/model/json/JSONModel"
+	"sap/ui/model/json/JSONModel",
+	"sap/m/MessageBox"
     
-], function (Controller, History, JSONModel) {
+], function (Controller, History, JSONModel, MessageBox) {
 	"use strict";
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.Detalhes", {
@@ -46,12 +47,28 @@ sap.ui.define([
 			}
 		},
 
-		botaoDeletar: function (){
-			alert("configurar botão")
+		botaoDeletar: async function (){
+			let livroSelecionado = this.getView().getModel("livro").getData();
+			let idASerDeletado = livroSelecionado.codigo;
+			let oRouter = this.getOwnerComponent().getRouter();
 
-			
+			await fetch(`https://localhost:7278/CrudLivro/${idASerDeletado}`, {
+				method: 'DELETE'
+			})
 
+			oRouter.navTo("overview");
+		},
+
+
+		botaoEditar: function(){
+			// alert("configurar botão")
+			let idLivro = this.getView().getModel("livro").getData().codigo
+			var oRouter = this.getOwnerComponent().getRouter();
+			oRouter.navTo("editarLivro", {
+				id: idLivro
+				
+			});
 		}
 
 	});
-});
+})

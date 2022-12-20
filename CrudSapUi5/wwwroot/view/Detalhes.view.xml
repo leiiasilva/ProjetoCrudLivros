@@ -4,32 +4,32 @@
 	xmlns:l="sap.ui.layout"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:form="sap.ui.layout.form">
-	<Page
+<Page
 	title="{i18n>tituloDaPaginaDetalhes}"
 	showNavButton="true"
 	navButtonPress=".botaoVoltar">
+	
 	<headerContent>
 		<Button text="Editar"  press=".botaoEditar" icon="sap-icon://edit" />
 		<Button text="Deletar"  press=".botaoDeletar" icon="sap-icon://delete" />
 	</headerContent>
-
 	
-	<VBox >
+<VBox >
 	<form:SimpleForm
 		width="70%"
 	 	layout="ResponsiveGridLayout" 
 	 	editable="true">
 	
-		<Label text="Código"  /> <Input  value="{livro>/codigo}"  editable="false"  /> <Text id="idCodigo"  />
+		<Label text="Código"  /> <Text  text="{livro>/codigo}"    /> 
 
-		<Label text="Nome"   /> <Input value="{livro>/nome}" editable="false" /> <Text id="idNome"/>
+		<Label text="Nome"   /> <Text  text="{livro>/nome}" editable="false" /> 
 
-		<Label text="Autor"  /> <Input  value="{livro>/autor}" editable="false" /> <Text id="idAutor"/>
+		<Label text="Autor"  /> <Text  text="{livro>/autor}" editable="false" /> 
 
-		<Label text="Editora"  /> <Input  value="{livro>/editora}" editable="false" /> <Text id="idEditora"/>
+		<Label text="Editora"  /> <Text  text="{livro>/editora}" editable="false" /> 
 
 		<Label text="Ano Publicação"/>
-		<Input value="{
+		<Text  text="{
 					path: 'livro>/anoPublicacao',
 					type: 'sap.ui.model.type.Date',
 					formatOptions: {
@@ -38,11 +38,11 @@
 						pattern: 'yyyy-MM-ddTHH:mm:ss'
 					  }
 					}
-				  }"  editable="false" /> <Text id="idAnoPublicacao"/>
-	
+				  }"  editable="false" /> 
+
+
 	</form:SimpleForm>	
-	</VBox>
-	
+</VBox>
 </Page>
 </mvc:View>
 
