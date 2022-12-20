@@ -12,27 +12,32 @@ sap.ui.define([
 
 		
 		onInit: function () {
-			// var router = sap.ui.core.UIComponent.getRouterFor(this); 
-			let router = this.getOwnerComponent().getRouter();
-			router.getRoute("telaCadastro").attachPatternMatched(this.ajustarRotaCriacao, this);
-			// router.attachRoutePatternMatched(this.ajustarRota, this);
+			var router = sap.ui.core.UIComponent.getRouterFor(this);
+			router.attachRoutePatternMatched(this.ajustarRota, this);
+			// // var router = sap.ui.core.UIComponent.getRouterFor(this); 
+			// let router = this.getOwnerComponent().getRouter();
+			// router.getRoute("telaCadastro").attachPatternMatched(this.ajustarRotaCriacao, this);
+			// // router.attachRoutePatternMatched(this.ajustarRota, this);
 		},
 
-		ajustarRotaCriacao: function(){
-			this.getView().setModel(new sap.ui.model.json.JSONModel({}), "livro");
-
-		},
+		
 		
 		ajustarRota: function (oEvent) {
-			
-			var livrosCadastrados = window.decodeURIComponent(oEvent.getParameter("arguments").id);
-			if (livrosCadastrados =! undefined){
-				this.mostrarLista(livrosCadastrados)
-
-			}else{
-				
+			if (oEvent.getParameter("name") == "editarLivro") {
+				var idEditar = window.decodeURIComponent(oEvent.getParameter("arguments").id);
+				this.mostrarLista(idEditar)
+			} else {
 				this.getView().setModel(new sap.ui.model.json.JSONModel({}), "livro");
 			}
+			
+			// var livrosCadastrados = window.decodeURIComponent(oEvent.getParameter("arguments").id);
+			// if (livrosCadastrados =! undefined){
+			// 	this.mostrarLista(livrosCadastrados)
+
+			// }else{
+				
+			// 	this.getView().setModel(new sap.ui.model.json.JSONModel({}), "livro");
+			// }
 
 		},
 
@@ -94,8 +99,9 @@ sap.ui.define([
 
 		botaoSalvar: function(){
 			var salvarLivro = this.getView().getModel("livro").getData();
-			if (!!salvarLivro.id) {
+			if (!salvarLivro.id) {
 					this.editarLivro()
+					alert("EDITADO")
 				} else {
 					this.cadastrarLivro()
 				};
@@ -106,7 +112,7 @@ sap.ui.define([
 			var livroASerEditado = this.getView().getModel("livro").getData();
 
 
-			await fetch(`https://localhost:7278/CrudLivro/${livroASerEditado}`, {
+			await fetch(`https://localhost:7278/CrudLivro/${livroASerEditado.codigo}`, {
 
 							method: 'PUT',
 							headers: {
@@ -114,7 +120,7 @@ sap.ui.define([
 							},
 							
 							body: JSON.stringify({
-								//codigo: livroASerEditado.codigo,
+							
 								nome: livroASerEditado.nome,
 								autor: livroASerEditado.autor,
 								editora: livroASerEditado.editora,
@@ -124,9 +130,10 @@ sap.ui.define([
 						let oRouter = this.getOwnerComponent().getRouter();
 						oRouter.navTo("detalhes", {
 							codigo: livroASerEditado.codigo
+							
 						});
 						
-					}
+		}
 
 	});
 });
