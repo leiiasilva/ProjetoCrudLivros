@@ -3,6 +3,7 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator"
+
 ], function (Controller, JSONModel, Filter, FilterOperator) {
 	"use strict";
 
@@ -11,39 +12,39 @@ sap.ui.define([
 		onInit: function () {
 			this.getOwnerComponent();
 			var oRouter = this.getOwnerComponent().getRouter();
-			oRouter.getRoute("overview").attachPatternMatched(this.ajustarRota, this); 
+			oRouter.getRoute("overview").attachPatternMatched(this.ajustarRota, this);
 		},
-		
+
 		ajustarRota: function () {
-			this.mostrarLista();
-			
+			this.exibirListaNaTela();
 		},
 
 
-		buscarLivros: async function (){
+
+		buscarLivrosDoBancoDeDados: async function () {
 			let livroASerBuscado;
-			 await fetch(`https://localhost:7278/CrudLivro`)
-			.then(response => response.json())
-			.then(data => livroASerBuscado = data)
+			await fetch(`https://localhost:7278/CrudLivro`)
+				.then(response => response.json())
+				.then(data => livroASerBuscado = data)
 			return livroASerBuscado;
 		},
 
-		mostrarLista: function(){
-			 var exibirLista = this.buscarLivros();
-			 exibirLista.then(lista => {
+		exibirListaNaTela: function () {
+			var exibirLivro = this.buscarLivrosDoBancoDeDados();
+			exibirLivro.then(lista => {
 				let oModel = new JSONModel(lista);
 				this.getView().setModel(oModel, "listaDeLivros");
-				
-			 })
-				
+
+			})
+
 
 		},
-		botaoCadastrar : function (){ //ao clicar no botão cadastrar
+		aoClicarEmAdicionar: function () { //ao clicar no botão cadastrar
 			var oRouter = this.getOwnerComponent().getRouter();
 			oRouter.navTo("telaCadastro")
 		},
-		
-		onPress: function (oEvent) {
+
+		aoClicarNoLivroDaLista: function (oEvent) {
 			var oItem = oEvent.getSource();
 			var oRouter = this.getOwnerComponent().getRouter();
 			oRouter.navTo("detalhes", {
