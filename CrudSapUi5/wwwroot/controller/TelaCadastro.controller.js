@@ -1,5 +1,3 @@
-// var url= fetch(`https://localhost:7278/CrudLivro ${id}`).then(response=> response.json()).then(data => console.log(data));
-// console.log(url);
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/core/routing/History",
@@ -14,33 +12,33 @@ sap.ui.define([
 
 		
 		onInit: function () {
-			// var router = sap.ui.core.UIComponent.getRouterFor(this); 
-			let router = this.getOwnerComponent().getRouter();
-			router.getRoute("telaCadastro").attachPatternMatched(this.ajustarRotaCriacao, this);
-			// router.attachRoutePatternMatched(this.ajustarRota, this);
+			var router = sap.ui.core.UIComponent.getRouterFor(this);
+			router.attachRoutePatternMatched(this.ajustarRota, this);
+			// // var router = sap.ui.core.UIComponent.getRouterFor(this); 
+			// let router = this.getOwnerComponent().getRouter();
+			// router.getRoute("telaCadastro").attachPatternMatched(this.ajustarRotaCriacao, this);
+			// // router.attachRoutePatternMatched(this.ajustarRota, this);
 		},
 
-		ajustarRotaCriacao: function(){
-			this.getView().setModel(new sap.ui.model.json.JSONModel({}), "livro");
-
-		},
+		
 		
 		ajustarRota: function (oEvent) {
-			
-			var livrosCadastrados = window.decodeURIComponent(oEvent.getParameter("arguments").id);
-			if (livrosCadastrados =! undefined){
-				this.mostrarLista(livrosCadastrados)
-
-			}else{
+			if (oEvent.getParameter("name") == "editarLivro") {
+				var idEditar = window.decodeURIComponent(oEvent.getParameter("arguments").id);
+				this.mostrarLista(idEditar)
+			} else {
 				this.getView().setModel(new sap.ui.model.json.JSONModel({}), "livro");
 			}
 			
-			
-			// this.getView().setModel(new JSONModel({
-			// 	nome: "", autor: "", editora: "", anoPublicacao: "", }), "listaDeLivros") 
-		
-			
-			
+			// var livrosCadastrados = window.decodeURIComponent(oEvent.getParameter("arguments").id);
+			// if (livrosCadastrados =! undefined){
+			// 	this.mostrarLista(livrosCadastrados)
+
+			// }else{
+				
+			// 	this.getView().setModel(new sap.ui.model.json.JSONModel({}), "livro");
+			// }
+
 		},
 
 		buscarLivro: function (livrosCadastrados) {
@@ -73,13 +71,13 @@ sap.ui.define([
 		},
 
 
-		botaoSalvar: function(){
-			var cadastrarLivro = this.getView().getModel("livro").getData();
+		cadastrarLivro: function(){
+			var livroASerCadastrado = this.getView().getModel("livro").getData();
 			let corpo = JSON.stringify({
-				nome: cadastrarLivro.nome,
-				autor: cadastrarLivro.autor,
-				editora: cadastrarLivro.editora,
-				anoPublicacao: cadastrarLivro.anoPublicacao,
+				nome: livroASerCadastrado.nome,
+				autor: livroASerCadastrado.autor,
+				editora: livroASerCadastrado.editora,
+				anoPublicacao: livroASerCadastrado.anoPublicacao,
 			}) 
 
 			fetch('https://localhost:7278/CrudLivro', {
@@ -87,16 +85,7 @@ sap.ui.define([
 				headers: {
 					'content-type': "application/json; charset=utf-8"
 				},
-
 				body: corpo
-				// body: JSON.stringify(cadastrarLivro.getData())
-				
-				// body: JSON.stringify({
-				// 	nome: cadastrarLivro.nome,
-				// 	autor: cadastrarLivro.autor,
-				// 	editora: cadastrarLivro.editora,
-				// 	anoPublicacao: cadastrarLivro.anoPublicacao,
-				// })
 			})
 			.then((response) => { 
 				if (response.status != 200){
@@ -105,8 +94,47 @@ sap.ui.define([
 					alert("Livro cadastrado")
 				}
 			})
-			
+
 		},
+
+		botaoSalvar: function(){
+			var salvarLivro = this.getView().getModel("livro").getData();
+			if (!salvarLivro.id) {
+					this.editarLivro()
+					alert("EDITADO")
+				} else {
+					this.cadastrarLivro()
+				};
+
+		},
+
+		editarLivro: async function(){
+			var livroASerEditado = this.getView().getModel("livro").getData();
+
+
+			await fetch(`https://localhost:7278/CrudLivro/${livroASerEditado.codigo}`, {
+
+							method: 'PUT',
+							headers: {
+								"Content-Type": "application/json; charset=utf-8"
+							},
+							
+							body: JSON.stringify({
+							
+								nome: livroASerEditado.nome,
+								autor: livroASerEditado.autor,
+								editora: livroASerEditado.editora,
+								anoPublicacao: livroASerEditado.anoPublicacao,
+							})
+						})
+						let oRouter = this.getOwnerComponent().getRouter();
+						oRouter.navTo("detalhes", {
+							codigo: livroASerEditado.codigo
+							
+						});
+						
+		}
 
 	});
 });
+
