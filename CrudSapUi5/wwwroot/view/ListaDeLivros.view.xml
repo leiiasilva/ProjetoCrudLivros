@@ -17,7 +17,7 @@
 			<Toolbar>
 			<SearchField width="30%" search=".onFilterListaDeLivros"/>
 				<ToolbarSpacer/>
-				<Button type="transparent" icon="sap-icon://add"  press=".aoClicarEmAdicionar"/>
+				<Button  icon="sap-icon://add"  press=".aoClicarEmAdicionar"/>
 			</Toolbar>
 		</headerToolbar>
 		<columns>
@@ -55,9 +55,14 @@
 					<Text text="{listaDeLivros>autor}"/>
 					<Text text="{listaDeLivros>editora}"/>
 					<Text text="{
-						path: 'listaDeLivros>anoPublicacao'
-						
-						
+						path: 'listaDeLivros>anoPublicacao',
+						type: 'sap.ui.model.type.DateTime',
+                        formatOptions: {
+                            style: 'short',
+                            source: {
+                              pattern: 'yyyy-MM-ddTHH:mm:ss'
+                            }
+                          }
 					}"/>
 					
 				</cells>

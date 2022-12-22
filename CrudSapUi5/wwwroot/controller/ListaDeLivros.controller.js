@@ -2,52 +2,45 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/model/Filter",
-	"sap/ui/model/FilterOperator"
+	"sap/ui/model/FilterOperator",
+	"../servicos/Repositorio.controller"
 
-], function (Controller, JSONModel, Filter, FilterOperator) {
+], function (Controller, JSONModel, Filter, FilterOperator, Repositorio) {
 	"use strict";
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.ListaDeLivros", {
 
+
+		rota: null,
 		onInit: function () {
-			this.getOwnerComponent();
-			var oRouter = this.getOwnerComponent().getRouter();
-			oRouter.getRoute("overview").attachPatternMatched(this.ajustarRota, this);
+			this.rota = this.getOwnerComponent().getRouter();
+			this.rota.getRoute("overview").attachPatternMatched(this.ajustarRota, this);
 		},
+
 
 		ajustarRota: function () {
-			this.exibirListaNaTela();
+			this.buscarLivrosDoBancoDeDados();
 		},
-
 
 
 		buscarLivrosDoBancoDeDados: async function () {
-			let livroASerBuscado;
-			await fetch(`https://localhost:7278/CrudLivro`)
-				.then(response => response.json())
-				.then(data => livroASerBuscado = data)
-			return livroASerBuscado;
+			const nomeDaLista = "listaDeLivros";
+			let repositorio = new Repositorio;
+			repositorio.buscarTodosOsLivros()
+				.then(lista => {
+					let oModel = new JSONModel(lista);
+					this.getView().setModel(oModel, nomeDaLista)
+				})
 		},
 
-		exibirListaNaTela: function () {
-			var exibirLivro = this.buscarLivrosDoBancoDeDados();
-			exibirLivro.then(lista => {
-				let oModel = new JSONModel(lista);
-				this.getView().setModel(oModel, "listaDeLivros");
 
-			})
-
-
-		},
-		aoClicarEmAdicionar: function () { //ao clicar no botão cadastrar
-			var oRouter = this.getOwnerComponent().getRouter();
-			oRouter.navTo("telaCadastro")
+		aoClicarEmAdicionar: function () {
+			this.rota.navTo("telaCadastro")
 		},
 
-		aoClicarNoLivroDaLista: function (oEvent) {
-			var oItem = oEvent.getSource();
-			var oRouter = this.getOwnerComponent().getRouter();
-			oRouter.navTo("detalhes", {
+		aoClicarNoLivroDaLista: function (Evento) {
+			let oItem = Evento.getSource();
+			this.rota.navTo("detalhes", {
 				id: window.encodeURIComponent(oItem.getBindingContext("listaDeLivros").getProperty("codigo"))
 			});
 		}

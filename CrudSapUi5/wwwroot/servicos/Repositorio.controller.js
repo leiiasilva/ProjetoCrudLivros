@@ -1,9 +1,10 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller"
+	
 ], function(Controller) {
     'use strict';
     
-    return Controller.extend("sap.ui.demo.walkthroug.controller.Repositorio",{
+    return Controller.extend("sap.ui.demo.walkthrough.controller.Repositorio",{
 
         buscarTodosOsLivros: async function(){
             let ObterTodosOsLivros;
@@ -22,8 +23,7 @@ sap.ui.define([
 
 
         cadastrarLivro: function(){
-			var livroASerCadastrado = this.getView().getModel("livro").getData();
-
+			let livroASerCadastrado;
 			fetch('https://localhost:7278/CrudLivro', {
 				method: 'POST',
 				headers: {
@@ -36,8 +36,7 @@ sap.ui.define([
 					editora: livroASerCadastrado.editora,
 					anoPublicacao: livroASerCadastrado.anoPublicacao,
 				}) 
-			})
-
+			})	
         },
 
         editarLivro: async function(){
@@ -64,6 +63,6 @@ sap.ui.define([
             })
         }
 
-    })
+    });
 
 });

@@ -2,44 +2,39 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/core/routing/History",
 	"sap/ui/model/json/JSONModel",
-	"sap/m/MessageBox"
+	"sap/m/MessageBox",
+	"../servicos/Repositorio.controller"
 
 
-], function (Controller, History, JSONModel, MessageBox) {
+], function (Controller, History, JSONModel, MessageBox, Repositorio) {
 	"use strict";
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.TelaCadastro", {
 
-
+		rota: null,
 		onInit: function () {
-			var router = sap.ui.core.UIComponent.getRouterFor(this);
-			router.attachRoutePatternMatched(this.ajustarRota, this);
+			this.rota = this.getOwnerComponent().getRouter();
+			this.rota.attachRoutePatternMatched(this.ajustarRota, this);
 		},
 
 		ajustarRota: function (oEvent) {
 			if (oEvent.getParameter("name") == "editarLivro") {
 				var idEditar = window.decodeURIComponent(oEvent.getParameter("arguments").id);
-				this.mostrarLista(idEditar)
+				this.buscarLivro(idEditar)
 			} else {
 				this.getView().setModel(new sap.ui.model.json.JSONModel({}), "livro");
 			}
-
 		},
 
-		buscarLivro: function (livrosCadastrados) {
-			let livroASerCadastrado = fetch(`https://localhost:7278/CrudLivro/${livrosCadastrados}`)
-				.then((response) => response.json())
-				.then(data => livroASerCadastrado = data)
-			return livroASerCadastrado;
 
-
-		},
-		mostrarLista: function (livrosCadastrados) {
-			var exibirLista = this.buscarLivro(livrosCadastrados)
-			exibirLista.then(lista => {
-				let oModel = new JSONModel(lista);
-				this.getView().setModel(oModel, "livro")
-			})
+		buscarLivro: function (livroASerBuscadoPorId) {
+			const nomeDoModelo = "livro";
+			let repositorio = new Repositorio;
+			repositorio.buscarLivroPorId(livroASerBuscadoPorId)
+				.then(lista => {
+					let oModel = new JSONModel(lista);
+					this.getView().setModel(oModel, nomeDoModelo)
+				})
 		},
 
 
@@ -50,28 +45,31 @@ sap.ui.define([
 			if (sPreviousHash !== undefined) {
 				window.history.go(-1);
 			} else {
-				var oRouter = this.getOwnerComponent().getRouter();
-				oRouter.navTo("overview", {});
+				this.rota.navTo("overview", {});
 			}
 		},
 
 
-		cadastrarLivro: function () {
-			var livroASerCadastrado = this.getView().getModel("livro").getData();
+		adicionarLivro: function () {
+			this.getView().getModel("livro").getData();
+			let repositorio = new Repositorio;
+			repositorio.cadastrarLivro();
 
-			fetch('https://localhost:7278/CrudLivro', {
-				method: 'POST',
-				headers: {
-					'content-type': "application/json; charset=utf-8"
-				},
 
-				body: JSON.stringify({
-					nome: livroASerCadastrado.nome,
-					autor: livroASerCadastrado.autor,
-					editora: livroASerCadastrado.editora,
-					anoPublicacao: livroASerCadastrado.anoPublicacao,
-				})
-			})
+			// var livroASerCadastrado = this.getView().getModel("livro").getData();
+			// fetch('https://localhost:7278/CrudLivro', {
+			// 	method: 'POST',
+			// 	headers: {
+			// 		'content-type': "application/json; charset=utf-8"
+			// 	},
+
+			// 	body: JSON.stringify({
+			// 		nome: livroASerCadastrado.nome,
+			// 		autor: livroASerCadastrado.autor,
+			// 		editora: livroASerCadastrado.editora,
+			// 		anoPublicacao: livroASerCadastrado.anoPublicacao,
+			// 	})
+			// })
 		},
 
 		botaoSalvar: function () {
@@ -80,15 +78,14 @@ sap.ui.define([
 				this.editarLivro()
 				alert("EDITADO")
 			} else {
-				this.cadastrarLivro()
+				this.adicionarLivro()
+				alert("Cadastrado")
 			};
 
 		},
 
 		editarLivro: async function () {
 			var livroASerEditado = this.getView().getModel("livro").getData();
-
-
 			await fetch(`https://localhost:7278/CrudLivro/${livroASerEditado.codigo}`, {
 
 				method: 'PUT',
@@ -103,8 +100,8 @@ sap.ui.define([
 					anoPublicacao: livroASerEditado.anoPublicacao,
 				})
 			})
-			let oRouter = this.getOwnerComponent().getRouter();
-			oRouter.navTo("detalhes", {
+
+			this.rota.navTo("detalhes", {
 				id: livroASerEditado.codigo
 
 			});
