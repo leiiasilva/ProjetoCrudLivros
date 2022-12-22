@@ -17,7 +17,7 @@
 			<Toolbar>
 			<SearchField width="30%" search=".onFilterListaDeLivros"/>
 				<ToolbarSpacer/>
-				<Button icon="sap-icon://create-form" text="Cadastrar" press=".botaoCadastrar"/>
+				<Button  icon="sap-icon://add"  press=".aoClicarEmAdicionar"/>
 			</Toolbar>
 		</headerToolbar>
 		<columns>
@@ -48,15 +48,21 @@
 		<items>
 			<ColumnListItem
 				type="Navigation"
-				press=".onPress">
+				press=".aoClicarNoLivroDaLista">
 				<cells>
 					<Text text="{listaDeLivros>codigo}"/>
 					<Text text="{listaDeLivros>nome}"/>
 					<Text text="{listaDeLivros>autor}"/>
 					<Text text="{listaDeLivros>editora}"/>
 					<Text text="{
-						path: 'listaDeLivros>anoPublicacao'
-						
+						path: 'listaDeLivros>anoPublicacao',
+						type: 'sap.ui.model.type.DateTime',
+                        formatOptions: {
+                            style: 'short',
+                            source: {
+                              pattern: 'yyyy-MM-ddTHH:mm:ss'
+                            }
+                          }
 					}"/>
 					
 				</cells>

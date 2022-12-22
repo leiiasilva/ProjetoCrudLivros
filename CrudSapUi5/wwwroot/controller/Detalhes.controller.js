@@ -3,7 +3,7 @@ sap.ui.define([
 	"sap/ui/core/routing/History",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageBox"
-    
+
 ], function (Controller, History, JSONModel, MessageBox) {
 	"use strict";
 
@@ -12,30 +12,32 @@ sap.ui.define([
 		onInit: function () {
 			this.getOwnerComponent();
 			var oRouter = this.getOwnerComponent().getRouter();
-			oRouter.getRoute("detalhes").attachPatternMatched(this.ajustarRota, this); //só será acionado para a rota que tiver um padrão correspondente
+			oRouter.getRoute("detalhes").attachPatternMatched(this.ajustarRota, this);
 		},
-		
+
 		ajustarRota: function (oEvent) {
 			var mostrarDetalhes = oEvent.getParameter("arguments").id;
-			this.mostrarLista(mostrarDetalhes);
+			this.exibirLivroBuscado(mostrarDetalhes);
 		},
 
-		buscarLivro: function (livroBuscado) {
-			let livroASerBuscado = fetch(`https://localhost:7278/CrudLivro/${livroBuscado}`)
-			 	.then((response) => response.json())
-				.then(data => livroASerBuscado = data)
-			return livroASerBuscado;
+		buscarLivroDaLista: function (livroASerExibido) {
+			let livroASerDetalhado = fetch(`https://localhost:7278/CrudLivro/${livroASerExibido}`)
+				.then((response) => response.json())
+				.then(data => livroASerDetalhado = data)
+			return livroASerDetalhado;
 
-			
+
 		},
-		mostrarLista: function (livroBuscado) {
-			var exibirLista = this.buscarLivro(livroBuscado)
-			exibirLista.then(livroRetornado => {
+
+		exibirLivroBuscado: function (livroBuscado) {
+			var exibirLivroDetalhado = this.buscarLivroDaLista(livroBuscado)
+			exibirLivroDetalhado.then(livroRetornado => {
 				let oModel = new JSONModel(livroRetornado);
 				this.getView().setModel(oModel, "livro")
 			})
 		},
-        botaoVoltar: function(){
+
+		aoClicarEmVoltar: function () {
 			var oHistory = History.getInstance();
 			var sPreviousHash = oHistory.getPreviousHash();
 
@@ -43,39 +45,36 @@ sap.ui.define([
 				window.history.go(-1);
 			} else {
 				var oRouter = this.getOwnerComponent().getRouter();
-				oRouter.navTo("overview", {}, true);
+				oRouter.navTo("overview", {});
 			}
 		},
 
-		botaoDeletar:  function (){
+		aoClicarEmDeletar: function () {
 			let livroSelecionado = this.getView().getModel("livro").getData();
 			let idASerDeletado = livroSelecionado.codigo;
 			let oRouter = this.getOwnerComponent().getRouter();
-			MessageBox.confirm("Deseja realmente deletar esse livro?",{
+			MessageBox.confirm("Deseja realmente deletar esse livro?", {
 				title: "Confirmação",
 				actions: [sap.m.MessageBox.Action.OK,
-					sap.m.MessageBox.Action.CANCEL ],
+				sap.m.MessageBox.Action.CANCEL],
 
-				onClose: async function (oAction){
-					if(oAction === OK){
+				onClose: async function (oAction) {
+					if (oAction === 'OK') {
 						await fetch(`https://localhost:7278/CrudLivro/${idASerDeletado}`, {
-				method: 'DELETE'
-			})
-				oRouter.navTo("overview");
-
+							method: 'DELETE'
+						})
+						oRouter.navTo("overview");
 					}
 				}
 			})
 		},
 
-
-		botaoEditar: function(){
-			// alert("configurar botão")
-			let idLivro = this.getView().getModel("livro").getData().codigo
+		aoClicarEmEditar: function () {
+			let idEditarLivro = this.getView().getModel("livro").getData().codigo
 			var oRouter = this.getOwnerComponent().getRouter();
 			oRouter.navTo("editarLivro", {
-				id: idLivro
-				
+				id: idEditarLivro
+
 			});
 		}
 

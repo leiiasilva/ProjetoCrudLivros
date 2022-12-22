@@ -7,11 +7,11 @@
 <Page
 	title="{i18n>tituloDaPaginaDetalhes}"
 	showNavButton="true"
-	navButtonPress=".botaoVoltar">
+	navButtonPress=".aoClicarEmVoltar">
 	
 	<headerContent>
-		<Button text="Editar"  press=".botaoEditar" icon="sap-icon://edit" />
-		<Button text="Deletar"  press=".botaoDeletar" icon="sap-icon://delete" />
+		<Button text="Editar"  press=".aoClicarEmEditar" icon="sap-icon://edit" />
+		<Button text="Deletar"  press=".aoClicarEmDeletar" icon="sap-icon://delete" />
 	</headerContent>
 	
 <VBox >
@@ -20,13 +20,13 @@
 	 	layout="ResponsiveGridLayout" 
 	 	editable="true">
 	
-		<Label text="Código"  /> <Text  text="{livro>/codigo}"    /> 
+		<Label text="Código"  /> <Text  text="{livro>/codigo}"/> 
 
-		<Label text="Nome"   /> <Text  text="{livro>/nome}" editable="false" /> 
+		<Label text="Nome"   /> <Text  text="{livro>/nome}"/> 
 
-		<Label text="Autor"  /> <Text  text="{livro>/autor}" editable="false" /> 
+		<Label text="Autor"  /> <Text  text="{livro>/autor}"/> 
 
-		<Label text="Editora"  /> <Text  text="{livro>/editora}" editable="false" /> 
+		<Label text="Editora"  /> <Text  text="{livro>/editora}"/> 
 
 		<Label text="Ano Publicação"/>
 		<Text  text="{
@@ -38,70 +38,8 @@
 						pattern: 'yyyy-MM-ddTHH:mm:ss'
 					  }
 					}
-				  }"  editable="false" /> 
-
-
+				  }"  /> 
 	</form:SimpleForm>	
 </VBox>
 </Page>
 </mvc:View>
-
-
-
-
-<!-- <mvc:View
-	controllerName="sap.ui.demo.walkthrough.controller.Detalhes"
-	xmlns="sap.m"
-	xmlns:l="sap.ui.layout"
-	xmlns:mvc="sap.ui.core.mvc">
-	<Page
-	title="{i18n>tituloDaPaginaDetalhes}"
-	showNavButton="true"
-	navButtonPress=".botaoVoltar">
-	<headerContent>
-	
-		<Button text="Editar"  press=".botaoEditar" icon="sap-icon://edit" />
-		<Button text="Deletar"  press=".botaoDeletar" icon="sap-icon://delete" />
-	
-	</headerContent>
-
-	<l:VerticalLayout
-	class="sapUiContentPadding"
-	width="70%">
-	
-	
-	<l:content>
-		<List>
-			<DisplayListItem
-				label="Código"
-				value="{livro>/codigo}" />
-			<DisplayListItem
-				label="Nome"
-				value="{livro>/nome}" />
-			<DisplayListItem
-				label="Autor"
-				value="{livro>/autor}" />
-			<DisplayListItem
-				label="Editora"
-				value="{livro>/editora}" />
-			<DisplayListItem
-				label="Ano Publicacao"
-				value="{
-					path: 'livro>/anoPublicacao',
-					type: 'sap.ui.model.type.Date',
-					formatOptions: {
-					  style: 'long',
-					  source: {
-						pattern: 'yyyy-MM-ddTHH:mm:ss'
-					  }
-					}
-				  }"/>
-		</List>
-
-	</l:content>
-</l:VerticalLayout>
-	
-</Page>
-</mvc:View> -->
-
-
