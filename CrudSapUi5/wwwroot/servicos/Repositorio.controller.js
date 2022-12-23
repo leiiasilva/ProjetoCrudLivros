@@ -22,9 +22,9 @@ sap.ui.define([
         },
 
 
-        cadastrarLivro: function(){
-			let livroASerCadastrado;
-			fetch('https://localhost:7278/CrudLivro', {
+        cadastrarLivro: async function(livroAserSalvo){
+			let livroASerCadastrado = livroAserSalvo;
+			await fetch('https://localhost:7278/CrudLivro', {
 				method: 'POST',
 				headers: {
 					'content-type': "application/json; charset=utf-8"
@@ -39,8 +39,8 @@ sap.ui.define([
 			})	
         },
 
-        editarLivro: async function(){
-			var livroASerEditado = this.getView().getModel("livro").getData();
+        editarLivro: async function(livroEditado){
+			let livroASerEditado = livroEditado;
 
 			await fetch(`https://localhost:7278/CrudLivro/${livroASerEditado.codigo}`, {
 					method: 'PUT',
@@ -55,8 +55,10 @@ sap.ui.define([
 					})
 				})
            },
+
+
            deletarLivro: async function (excluirLivro) {
-            let livroSelecionado = excluirLivro.getData();
+            let livroSelecionado = excluirLivro;
             let idASerDeletado = livroSelecionado.codigo;
             await fetch(`https://localhost:7278/CrudLivro/${idASerDeletado}`, {
                 method: 'DELETE'

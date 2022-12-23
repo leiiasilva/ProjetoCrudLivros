@@ -2,9 +2,10 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/core/routing/History",
 	"sap/ui/model/json/JSONModel",
-	"sap/m/MessageBox"
+	"sap/m/MessageBox",
+	"../servicos/Repositorio.controller"
 
-], function (Controller, History, JSONModel, MessageBox) {
+], function (Controller, History, JSONModel, MessageBox, Repositorio) {
 	"use strict";
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.Detalhes", {
@@ -15,8 +16,8 @@ sap.ui.define([
 			oRouter.getRoute("detalhes").attachPatternMatched(this.ajustarRota, this);
 		},
 
-		ajustarRota: function (oEvent) {
-			var mostrarDetalhes = oEvent.getParameter("arguments").id;
+		ajustarRota: function (evento) {
+			var mostrarDetalhes = evento.getParameter("arguments").id;
 			this.exibirLivroBuscado(mostrarDetalhes);
 		},
 
@@ -49,24 +50,29 @@ sap.ui.define([
 			}
 		},
 
-		aoClicarEmDeletar: function () {
-			let livroSelecionado = this.getView().getModel("livro").getData();
-			let idASerDeletado = livroSelecionado.codigo;
-			let oRouter = this.getOwnerComponent().getRouter();
-			MessageBox.confirm("Deseja realmente deletar esse livro?", {
-				title: "Confirmação",
-				actions: [sap.m.MessageBox.Action.OK,
-				sap.m.MessageBox.Action.CANCEL],
+		aoClicarEmDeletar: function (excluirLivro) {
+			let _repositorio = new Repositorio;
+			_repositorio.deletarLivro(excluirLivro);
 
-				onClose: async function (oAction) {
-					if (oAction === 'OK') {
-						await fetch(`https://localhost:7278/CrudLivro/${idASerDeletado}`, {
-							method: 'DELETE'
-						})
-						oRouter.navTo("overview");
-					}
-				}
-			})
+
+
+			// let livroSelecionado = this.getView().getModel("livro").getData();
+			// let idASerDeletado = livroSelecionado.codigo;
+			// let oRouter = this.getOwnerComponent().getRouter();
+			// MessageBox.confirm("Deseja realmente deletar esse livro?", {
+			// 	title: "Confirmação",
+			// 	actions: [sap.m.MessageBox.Action.OK,
+			// 	sap.m.MessageBox.Action.CANCEL],
+
+			// 	onClose: async function (oAction) {
+			// 		if (oAction === 'OK') {
+			// 			await fetch(`https://localhost:7278/CrudLivro/${idASerDeletado}`, {
+			// 				method: 'DELETE'
+			// 			})
+			// 			oRouter.navTo("overview");
+			// 		}
+			// 	}
+			// })
 		},
 
 		aoClicarEmEditar: function () {
