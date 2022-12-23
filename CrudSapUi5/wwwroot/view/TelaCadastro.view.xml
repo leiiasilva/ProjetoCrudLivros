@@ -43,7 +43,7 @@
 		<l:HorizontalLayout
             class="sapUiContentPadding">
         	<l:content>            
-                <Button text="Salvar" press=".botaoSalvar"></Button>        
+                <Button text="Salvar" press=".aoClicarEmSalvar"></Button>        
             </l:content>
         </l:HorizontalLayout>
 	</l:VerticalLayout>
