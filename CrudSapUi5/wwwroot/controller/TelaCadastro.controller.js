@@ -71,12 +71,6 @@ sap.ui.define([
 		},
 
 		aoClicarEmSalvar: function () {
-			// let _validacaoLivro = new Validacao;
-			// // MessageBox.alert("Falha na validação dos campos");
-			// 	_validacaoLivro.validarCampo();
-
-
-
 			var salvarLivro = this.getView().getModel("livro").getData();
 			if (!!salvarLivro.codigo) {
 				this.editarLivro(salvarLivro)
