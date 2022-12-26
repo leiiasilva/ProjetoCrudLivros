@@ -33,13 +33,14 @@
 			placeholder="Digite o nome da editora"
 			class="sapUiSmallMarginBottom" />
 
-		<Label text="Ano Publicação" labelFor="AnoPublicacao"/>
+		<Label text="Ano da Publicação" labelFor="AnoPublicacao"/>
 		<DateTimeInput
 			id="AnoPublicacao"
 			value="{livro>/anoPublicacao}"
 			valueFormat="yyyy-MM-ddTHH:mm:ss"
 			placeholder="DD/MM/AAAA"
 			class="sapUiSmallMarginBottom" />
+			
 		<l:HorizontalLayout
             class="sapUiContentPadding">
         	<l:content>            

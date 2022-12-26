@@ -10,75 +10,52 @@ sap.ui.define([
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.Detalhes", {
 
+		rota: null,
 		onInit: function () {
-			this.getOwnerComponent();
-			var oRouter = this.getOwnerComponent().getRouter();
-			oRouter.getRoute("detalhes").attachPatternMatched(this.ajustarRota, this);
+			this.rota = this.getOwnerComponent().getRouter();
+			this.rota.getRoute("detalhes").attachPatternMatched(this.ajustarRota, this);
 		},
 
 		ajustarRota: function (evento) {
 			var mostrarDetalhes = evento.getParameter("arguments").id;
-			this.exibirLivroBuscado(mostrarDetalhes);
+			this.buscarLivroDaLista(mostrarDetalhes);
 		},
 
 		buscarLivroDaLista: function (livroASerExibido) {
-			let livroASerDetalhado = fetch(`https://localhost:7278/CrudLivro/${livroASerExibido}`)
-				.then((response) => response.json())
-				.then(data => livroASerDetalhado = data)
-			return livroASerDetalhado;
-
-
+			const nomeDoModelo = "livro";
+			let repositorio = new Repositorio;
+			repositorio.buscarLivroPorId(livroASerExibido)
+				.then(lista => {
+					let oModel = new JSONModel(lista);
+					this.getView().setModel(oModel, nomeDoModelo)
+				})
 		},
 
-		exibirLivroBuscado: function (livroBuscado) {
-			var exibirLivroDetalhado = this.buscarLivroDaLista(livroBuscado)
-			exibirLivroDetalhado.then(livroRetornado => {
-				let oModel = new JSONModel(livroRetornado);
-				this.getView().setModel(oModel, "livro")
-			})
-		},
 
 		aoClicarEmVoltar: function () {
 			var oHistory = History.getInstance();
 			var sPreviousHash = oHistory.getPreviousHash();
-
 			if (sPreviousHash !== undefined) {
 				window.history.go(-1);
 			} else {
-				var oRouter = this.getOwnerComponent().getRouter();
-				oRouter.navTo("overview", {});
+				this.rota.navTo("overview", {});
 			}
 		},
 
-		aoClicarEmDeletar: function (excluirLivro) {
-			let _repositorio = new Repositorio;
-			_repositorio.deletarLivro(excluirLivro);
+		aoClicarEmDeletar: function () {
+			let excluirLivro = this.getView().getModel("livro").getData().codigo
+			let repositorio = new Repositorio;
+			repositorio.deletarLivro(excluirLivro);
+			alert("deletado")
+			this.rota.navTo("overview", {
+				id: excluirLivro
 
-
-
-			// let livroSelecionado = this.getView().getModel("livro").getData();
-			// let idASerDeletado = livroSelecionado.codigo;
-			// let oRouter = this.getOwnerComponent().getRouter();
-			// MessageBox.confirm("Deseja realmente deletar esse livro?", {
-			// 	title: "Confirmação",
-			// 	actions: [sap.m.MessageBox.Action.OK,
-			// 	sap.m.MessageBox.Action.CANCEL],
-
-			// 	onClose: async function (oAction) {
-			// 		if (oAction === 'OK') {
-			// 			await fetch(`https://localhost:7278/CrudLivro/${idASerDeletado}`, {
-			// 				method: 'DELETE'
-			// 			})
-			// 			oRouter.navTo("overview");
-			// 		}
-			// 	}
-			// })
+			});
 		},
 
 		aoClicarEmEditar: function () {
 			let idEditarLivro = this.getView().getModel("livro").getData().codigo
-			var oRouter = this.getOwnerComponent().getRouter();
-			oRouter.navTo("editarLivro", {
+			this.rota.navTo("editarLivro", {
 				id: idEditarLivro
 
 			});
