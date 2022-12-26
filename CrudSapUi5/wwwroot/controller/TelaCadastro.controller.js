@@ -3,10 +3,11 @@ sap.ui.define([
 	"sap/ui/core/routing/History",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageBox",
-	"../servicos/Repositorio.controller"
+	"../servicos/Repositorio.controller",
+	"../servicos/Validacao.controller"
 
 
-], function (Controller, History, JSONModel, MessageBox, Repositorio) {
+], function (Controller, History, JSONModel, MessageBox, Repositorio, Validacao) {
 	"use strict";
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.TelaCadastro", {
@@ -70,6 +71,12 @@ sap.ui.define([
 		},
 
 		aoClicarEmSalvar: function () {
+			// let _validacaoLivro = new Validacao;
+			// // MessageBox.alert("Falha na validação dos campos");
+			// 	_validacaoLivro.validarCampo();
+
+
+
 			var salvarLivro = this.getView().getModel("livro").getData();
 			if (!!salvarLivro.codigo) {
 				this.editarLivro(salvarLivro)

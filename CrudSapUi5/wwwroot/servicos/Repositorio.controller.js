@@ -41,7 +41,6 @@ sap.ui.define([
 
         editarLivro: async function(livroEditado){
 			let livroASerEditado = livroEditado;
-
 			await fetch(`https://localhost:7278/CrudLivro/${livroASerEditado.codigo}`, {
 					method: 'PUT',
 					headers: {
@@ -58,9 +57,8 @@ sap.ui.define([
 
 
            deletarLivro: async function (excluirLivro) {
-            let livroSelecionado = excluirLivro;
-            let idASerDeletado = livroSelecionado.codigo;
-            await fetch(`https://localhost:7278/CrudLivro/${idASerDeletado}`, {
+			excluirLivro.codigo;
+            await fetch(`https://localhost:7278/CrudLivro/${excluirLivro}`, {
                 method: 'DELETE'
             })
         }
