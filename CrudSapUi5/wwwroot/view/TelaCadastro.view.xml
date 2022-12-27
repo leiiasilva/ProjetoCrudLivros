@@ -34,7 +34,7 @@
 			class="sapUiSmallMarginBottom" />
 
 		<Label text="Ano da Publicação" labelFor="AnoPublicacao"/>
-		<DateTimeInput
+		<DatePicker
 			id="AnoPublicacao"
 			value="{livro>/anoPublicacao}"
 			valueFormat="yyyy-MM-ddTHH:mm:ss"

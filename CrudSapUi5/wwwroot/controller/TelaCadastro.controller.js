@@ -72,15 +72,82 @@ sap.ui.define([
 
 		aoClicarEmSalvar: function () {
 			var salvarLivro = this.getView().getModel("livro").getData();
-			if (!!salvarLivro.codigo) {
-				this.editarLivro(salvarLivro)
-				alert("EDITADO")
-			} else {
-				this.adicionarLivro(salvarLivro)
-				alert("cadastrado")
-			};
+			var telaCadastro = this.getView(),
+				inputs = [ 
+				telaCadastro.byId("inputNome"),
+				// telaCadastro.byId("inputAutor"),
+				// telaCadastro.byId("inputEditora"),
 
+				],
+				validacao = false;
+				inputs.forEach(function (input) {
+					validacao = this.validarCampo(input) || validacao;
+				}, this);
+
+				if (!validacao){
+					if (!!salvarLivro.codigo) {
+						this.editarLivro(salvarLivro)
+						alert("EDITADO")
+					} else {
+						this.adicionarLivro(salvarLivro)
+						alert("cadastrado")
+					}
+
+				} else{
+					MessageBox.alert("Todos os campos devem ser preenchidos");
+				}
+
+
+
+
+			// if (!!salvarLivro.codigo) {
+			// 	this.editarLivro(salvarLivro)
+			// 	alert("EDITADO")
+			// } else {
+			// 	this.adicionarLivro(salvarLivro)
+			// 	alert("cadastrado")
+			// };
+
+		},
+
+		// validacaoData: function(){
+		// 	let validacao = new Date();
+		// 	validacao = this.byId("AnoPublicacao").setInitialFocusedDateValue(new Date(2017, 5, 13));
+		// }
+
+		validarCampo: function (input){
+			var condicao = 'None';
+			var validacao = false;
+			var oBinding = input.getBinding("value");
+	
+			let dataMinima = new Date(1860, 1, 1).toISOString();
+			let dataMaxima = new Date().toISOString();
+			var inputData = this.getView().byId("AnoPublicacao").getValue();
+	
+			if(inputData.length == 0){
+				condicao = "Error"
+				validacao = true;
+				
+			}else{
+				var dataFormatada = new Date(inputData).toISOString();
+			}			
+			try {
+				oBinding.getType().validateValue(input.getValue());
+				if(dataFormatada > dataMinima && dataFormatada < dataMaxima){
+					validacao = false;
+					condicao = "None";
+				}else{
+					validacao = true;
+					condicao = "Error";
+				}
+			} catch (oException) {
+				condicao = "Error";
+				validacao = true;
+			}
+			input.setValueState(condicao);
+			return validacao;
 		}
+
 
 	});
 });
