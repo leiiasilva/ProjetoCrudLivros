@@ -71,35 +71,28 @@ sap.ui.define([
 		},
 
 		aoClicarEmSalvar: function () {
-			var salvarLivro = this.getView().getModel("livro").getData();
-			var telaCadastro = this.getView(),
-				inputs = [ 
+			const datePicker = "AnoPublicacao";
+			const nomeDoModelo = "livro";
+			let _validacaoLivro = new Validacao;
+			let telaCadastro = this.getView();
+
+			let inputs = [
 				telaCadastro.byId("inputNome"),
-				// telaCadastro.byId("inputAutor"),
-				// telaCadastro.byId("inputEditora"),
+				telaCadastro.byId("inputAutor"),
+				telaCadastro.byId("inputEditora"),
+			];
 
-				],
-				validacao = false;
-				inputs.forEach(function (input) {
-					validacao = this.validarCampo(input) || validacao;
-				}, this);
+			let valorInputData = this.getView().byId(datePicker);
+			let erroDeValidacaoDeCampos = _validacaoLivro.ValidarCadastro(inputs, valorInputData).erroDeInput;
+			let erroDeValidacaoDeData = _validacaoLivro.ValidarCadastro(inputs, valorInputData).erroDeData;
+			let livroASerSalvo = this.getView().getModel(nomeDoModelo).getData();
 
-				if (!validacao){
-					if (!!salvarLivro.codigo) {
-						this.editarLivro(salvarLivro)
-						alert("EDITADO")
-					} else {
-						this.adicionarLivro(salvarLivro)
-						alert("cadastrado")
-					}
-
-				} else{
-					MessageBox.alert("Todos os campos devem ser preenchidos");
-				}
-
-
-
-
+			!erroDeValidacaoDeCampos && !erroDeValidacaoDeData ?
+				!livroASerSalvo.codigo ?
+				this.adicionarLivro(livroASerSalvo) :
+				this.editarLivro(livroASerSalvo) :
+				MessageBox.alert("Falha na validação dos campos");
+			//  var salvarLivro = this.getView().getModel("livro").getData();
 			// if (!!salvarLivro.codigo) {
 			// 	this.editarLivro(salvarLivro)
 			// 	alert("EDITADO")
@@ -108,47 +101,6 @@ sap.ui.define([
 			// 	alert("cadastrado")
 			// };
 
-		},
-
-		// validacaoData: function(){
-		// 	let validacao = new Date();
-		// 	validacao = this.byId("AnoPublicacao").setInitialFocusedDateValue(new Date(2017, 5, 13));
-		// }
-
-		validarCampo: function (input){
-			var condicao = 'None';
-			var validacao = false;
-			var oBinding = input.getBinding("value");
-	
-			let dataMinima = new Date(1860, 1, 1).toISOString();
-			let dataMaxima = new Date().toISOString();
-			var inputData = this.getView().byId("AnoPublicacao").getValue();
-	
-			if(inputData.length == 0){
-				condicao = "Error"
-				validacao = true;
-				
-			}else{
-				var dataFormatada = new Date(inputData).toISOString();
-			}			
-			try {
-				oBinding.getType().validateValue(input.getValue());
-				if(dataFormatada > dataMinima && dataFormatada < dataMaxima){
-					validacao = false;
-					condicao = "None";
-				}else{
-					validacao = true;
-					condicao = "Error";
-				}
-			} catch (oException) {
-				condicao = "Error";
-				validacao = true;
-			}
-			input.setValueState(condicao);
-			return validacao;
 		}
-
-
 	});
 });
-
