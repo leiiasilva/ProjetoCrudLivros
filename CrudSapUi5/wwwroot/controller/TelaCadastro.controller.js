@@ -3,13 +3,11 @@ sap.ui.define([
 	"sap/ui/core/routing/History",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageBox",
-	"sap/ui/model/ValidateException",
-	"sap/ui/core/Core",
 	"../servicos/Repositorio.controller",
 	"../servicos/Validacao.controller"
 
 
-], function (Controller, History, JSONModel, MessageBox, ValidateException, Core, Repositorio, Validacao) {
+], function (Controller, History, JSONModel, MessageBox, Repositorio, Validacao) {
 	"use strict";
 
 	const inputNome ='inputNome';
@@ -22,14 +20,6 @@ sap.ui.define([
 		onInit: function () {
 			this.rota = this.getOwnerComponent().getRouter();
 			this.rota.attachRoutePatternMatched(this.ajustarRota, this);
-			var oView = this.getView(),
-				oMM = Core.getMessageManager();
-				oView.setModel(new JSONModel({nome: "", autor: "", editora: "" }))
-
-			oMM.registerObject(oView.byId(inputNome), true);
-			oMM.registerObject(oView.byId(inputAutor), true);
-			oMM.registerObject(oView.byId(inputEditora), true);
-
 		},
 
 		ajustarRota: function (evento) {
@@ -85,52 +75,47 @@ sap.ui.define([
 		},
 
 		aoClicarEmSalvar: function () {
-			var salvarLivro = this.getView().getModel("livro").getData();
-			 let oView = this.getView(),
+			let validacao = new Validacao;
+			 let telaDeCadastro = this.getView(),
 				 inputs = [
-					oView.byId(inputNome),
-					oView.byId(inputAutor),
-					oView.byId(inputEditora)
+					telaDeCadastro.byId(inputNome),
+					telaDeCadastro.byId(inputAutor),
+					telaDeCadastro.byId(inputEditora)
 				],
 
 				bErroDeValidacao = false;
 				inputs.forEach(function (input){
-					bErroDeValidacao = this._validacaoDeCampo(input) || bErroDeValidacao;
+					bErroDeValidacao = validacao.validacaoDeCampo(input) || bErroDeValidacao;
 				}, this)
+				let salvarLivro = this.getView().getModel("livro").getData();
 
 				if(!bErroDeValidacao){ // !  é o operador de negação. Ele retorna o contrário da resolução da operação o qual ele precede.
 					if (!!salvarLivro.codigo) {
 						this.editarLivro(salvarLivro)
-						alert("EDITADO")
+						alert("Livro editado com sucesso")
 					} else {
 						this.adicionarLivro(salvarLivro)
-						alert("cadastrado")
+						alert("Cadastrado")
 					 };
 				}else{
 					MessageBox.alert("Preencha os campos")
 				}
-
 		},
 
-		_validacaoDeCampo: function (input){
-			var estado = 'None';
-			var erroDeValidacao = false;
-			let valor = input.getValue();
-
-			try{
-				if(valor.length == 0 || valor.length > 80)
-					throw new Error();
-			}catch(oException){
-				estado = "Error";
-				erroDeValidacao = true;
-				input.setValueStateText("O campo deve conter 1-80 caracteres");
-			}
-			input.setValueState(estado);
-			return erroDeValidacao;
-
+		geradorDeMensagens: function(){
+			// let salvarLivro = this.getView().getModel("livro").getData();
+			// let validacao = new Validacao;
+			// let mensagemDeSucesso;
+			// let mensagemDeErro;
+			return MessageBox.confirm("Deseja concluir o cadastro?", {
+				title: "Confirmação",                                    
+				onClose: null,                                       
+				styleClass: "",                                      
+				actions: [ sap.m.MessageBox.Action.OK,
+						   sap.m.MessageBox.Action.CANCEL ],         
+				emphasizedAction: sap.m.MessageBox.Action.OK,       
+				initialFocus: null,                                      
+			});
 		}
-
-
-
 	});
 });
