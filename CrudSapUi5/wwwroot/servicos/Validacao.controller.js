@@ -8,34 +8,33 @@ sap.ui.define([
 		ValidarCadastro: function (inputsCampo) {
 			let erroDeInput = false; // variavel do tipo boolean
 			inputsCampo.forEach(input =>  // forEach  iteração que executa uma função para cada elemento
-				erroDeInput = this.validarCampo(input) || erroDeInput, this);
+				erroDeInput = this._validacaoDeCampo(input) || erroDeInput, this);
 			return {
 				erroDeInput
 			};
-
-			// if (inputsCampo === null || erroDeInput){
-			// 	this.validarCampo(input);
-			// }
 		},
 
 		validarData: function () {
 			
 		},
 
-		validarCampo: function () {
-			let estado = "None"; //estado do input 'vazio'
-			let erroDeValidacao = false; // variavel boolean 
-			let oBinding = input.getBinding("value");
-			try {
-				oBinding.getType().validateValue(input.getValue());
-			} catch (oException) {
+		_validacaoDeCampo: function (input){
+			var estado = 'None';
+			var erroDeValidacao = false;
+			let valor = input.getValue();
+
+			try{
+				if(valor.length == 0 || valor.length > 80)
+					throw new Error();
+			}catch(oException){
 				estado = "Error";
 				erroDeValidacao = true;
+				input.setValueStateText("O campo deve conter 1-80 caracteres");
 			}
-			input.setValueStateText("O campo deve conter 1-80 caracteres");
 			input.setValueState(estado);
-			
-		},
+			return erroDeValidacao;
+
+		}
 
 		
 	});

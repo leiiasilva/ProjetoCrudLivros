@@ -85,6 +85,7 @@ sap.ui.define([
 		},
 
 		aoClicarEmSalvar: function () {
+			var salvarLivro = this.getView().getModel("livro").getData();
 			 let oView = this.getView(),
 				 inputs = [
 					oView.byId(inputNome),
@@ -93,14 +94,18 @@ sap.ui.define([
 				],
 
 				bErroDeValidacao = false;
-
 				inputs.forEach(function (input){
 					bErroDeValidacao = this._validacaoDeCampo(input) || bErroDeValidacao;
 				}, this)
 
-				
 				if(!bErroDeValidacao){ // !  é o operador de negação. Ele retorna o contrário da resolução da operação o qual ele precede.
-					MessageBox.alert("deu certo")
+					if (!!salvarLivro.codigo) {
+						this.editarLivro(salvarLivro)
+						alert("EDITADO")
+					} else {
+						this.adicionarLivro(salvarLivro)
+						alert("cadastrado")
+					 };
 				}else{
 					MessageBox.alert("Preencha os campos")
 				}
@@ -110,11 +115,9 @@ sap.ui.define([
 		_validacaoDeCampo: function (input){
 			var estado = 'None';
 			var erroDeValidacao = false;
-			// var oBinding = input.getBinding("value")
 			let valor = input.getValue();
 
 			try{
-			//	oBinding.getType().validateValue(input.getValue());
 				if(valor.length == 0 || valor.length > 80)
 					throw new Error();
 			}catch(oException){
