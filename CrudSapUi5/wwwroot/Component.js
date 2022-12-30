@@ -5,11 +5,12 @@ sap.ui.define([
    return UIComponent.extend("sap.ui.demo.walkthrough.Component", {
       metadata : {
          "interfaces": ["sap.ui.core.IAsyncContentCreation"],
-         manifest: "json"
+         manifest: "json",
       },
       init : function () {
          UIComponent.prototype.init.apply(this, arguments);
          this.getRouter().initialize();
+         
       }
    });
 });

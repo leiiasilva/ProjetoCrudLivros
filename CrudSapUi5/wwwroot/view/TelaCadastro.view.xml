@@ -8,14 +8,15 @@
 		showNavButton="true"
 		navButtonPress=".aoClicarEmVoltar">
 
-		<l:VerticalLayout class="sapUiContentPadding" width="50%">
+		<l:VerticalLayout id="tabela" class="sapUiContentPadding" width="50%">
 		<Label text="Nome" labelFor="inputNome" />
 		<Input
 			id="inputNome"
 			value="{livro>/nome}"
 			required="true"
 			placeholder="Digite o nome do livro"
-			class="sapUiSmallMarginBottom" />
+			class="sapUiSmallMarginBottom" 
+			change="aoPreencherCampo"/>
 
 		<Label text="Autor" labelFor="inputAutor" />
 		<Input
@@ -34,9 +35,10 @@
 			class="sapUiSmallMarginBottom" />
 
 		<Label text="Ano da Publicação" labelFor="AnoPublicacao"/>
-		<DateTimeInput
+		<DatePicker
 			id="AnoPublicacao"
 			value="{livro>/anoPublicacao}"
+			required="true"
 			valueFormat="yyyy-MM-ddTHH:mm:ss"
 			placeholder="DD/MM/AAAA"
 			class="sapUiSmallMarginBottom" />
