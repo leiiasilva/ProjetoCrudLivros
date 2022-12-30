@@ -15,7 +15,8 @@
 			value="{livro>/nome}"
 			required="true"
 			placeholder="Digite o nome do livro"
-			class="sapUiSmallMarginBottom" />
+			class="sapUiSmallMarginBottom" 
+			change="aoPreencherCampo"/>
 
 		<Label text="Autor" labelFor="inputAutor" />
 		<Input
@@ -37,6 +38,7 @@
 		<DatePicker
 			id="AnoPublicacao"
 			value="{livro>/anoPublicacao}"
+			required="true"
 			valueFormat="yyyy-MM-ddTHH:mm:ss"
 			placeholder="DD/MM/AAAA"
 			class="sapUiSmallMarginBottom" />

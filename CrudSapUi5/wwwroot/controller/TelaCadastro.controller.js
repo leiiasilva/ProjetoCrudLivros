@@ -3,12 +3,18 @@ sap.ui.define([
 	"sap/ui/core/routing/History",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageBox",
+	"sap/ui/model/ValidateException",
+	"sap/ui/core/Core",
 	"../servicos/Repositorio.controller",
 	"../servicos/Validacao.controller"
 
 
-], function (Controller, History, JSONModel, MessageBox, Repositorio, Validacao) {
+], function (Controller, History, JSONModel, MessageBox, ValidateException, Core, Repositorio, Validacao) {
 	"use strict";
+
+	const inputNome ='inputNome';
+	const inputAutor = 'inputAutor';
+	const inputEditora = 'inputEditora';
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.TelaCadastro", {
 
@@ -16,6 +22,14 @@ sap.ui.define([
 		onInit: function () {
 			this.rota = this.getOwnerComponent().getRouter();
 			this.rota.attachRoutePatternMatched(this.ajustarRota, this);
+			var oView = this.getView(),
+				oMM = Core.getMessageManager();
+				oView.setModel(new JSONModel({nome: "", autor: "", editora: "" }))
+
+			oMM.registerObject(oView.byId(inputNome), true);
+			oMM.registerObject(oView.byId(inputAutor), true);
+			oMM.registerObject(oView.byId(inputEditora), true);
+
 		},
 
 		ajustarRota: function (evento) {
@@ -71,36 +85,49 @@ sap.ui.define([
 		},
 
 		aoClicarEmSalvar: function () {
-			const datePicker = "AnoPublicacao";
-			const nomeDoModelo = "livro";
-			let _validacaoLivro = new Validacao;
-			let telaCadastro = this.getView();
+			 let oView = this.getView(),
+				 inputs = [
+					oView.byId(inputNome),
+					oView.byId(inputAutor),
+					oView.byId(inputEditora)
+				],
 
-			let inputs = [
-				telaCadastro.byId("inputNome"),
-				telaCadastro.byId("inputAutor"),
-				telaCadastro.byId("inputEditora"),
-			];
+				bErroDeValidacao = false;
 
-			let valorInputData = this.getView().byId(datePicker);
-			let erroDeValidacaoDeCampos = _validacaoLivro.ValidarCadastro(inputs, valorInputData).erroDeInput;
-			let erroDeValidacaoDeData = _validacaoLivro.ValidarCadastro(inputs, valorInputData).erroDeData;
-			let livroASerSalvo = this.getView().getModel(nomeDoModelo).getData();
+				inputs.forEach(function (input){
+					bErroDeValidacao = this._validacaoDeCampo(input) || bErroDeValidacao;
+				}, this)
 
-			!erroDeValidacaoDeCampos && !erroDeValidacaoDeData ?
-				!livroASerSalvo.codigo ?
-				this.adicionarLivro(livroASerSalvo) :
-				this.editarLivro(livroASerSalvo) :
-				MessageBox.alert("Falha na validação dos campos");
-			//  var salvarLivro = this.getView().getModel("livro").getData();
-			// if (!!salvarLivro.codigo) {
-			// 	this.editarLivro(salvarLivro)
-			// 	alert("EDITADO")
-			// } else {
-			// 	this.adicionarLivro(salvarLivro)
-			// 	alert("cadastrado")
-			// };
+				
+				if(!bErroDeValidacao){ // !  é o operador de negação. Ele retorna o contrário da resolução da operação o qual ele precede.
+					MessageBox.alert("deu certo")
+				}else{
+					MessageBox.alert("Preencha os campos")
+				}
+
+		},
+
+		_validacaoDeCampo: function (input){
+			var estado = 'None';
+			var erroDeValidacao = false;
+			// var oBinding = input.getBinding("value")
+			let valor = input.getValue();
+
+			try{
+			//	oBinding.getType().validateValue(input.getValue());
+				if(valor.length == 0 || valor.length > 80)
+					throw new Error();
+			}catch(oException){
+				estado = "Error";
+				erroDeValidacao = true;
+				input.setValueStateText("O campo deve conter 1-80 caracteres");
+			}
+			input.setValueState(estado);
+			return erroDeValidacao;
 
 		}
+
+
+
 	});
 });
