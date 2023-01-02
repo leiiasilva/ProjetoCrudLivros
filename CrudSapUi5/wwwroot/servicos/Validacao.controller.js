@@ -5,37 +5,67 @@ sap.ui.define([
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.Validacao", {
 
-		ValidarCadastro: function (inputsCampo) {
-			let erroDeInput = false; // variavel do tipo boolean
-			inputsCampo.forEach(input =>  // forEach  iteração que executa uma função para cada elemento
-				erroDeInput = this.validarCampo(input) || erroDeInput, this);
+		ValidarCadastro: function (inputsDeCampo, data) {
+			let erroDeInput = false;
+			let erroDeData = false;
+
+			inputsDeCampo.forEach(input =>
+				erroDeInput = this._validarCampo(input) || erroDeInput, this);
+			erroDeData = this._validarData(data);
 			return {
-				erroDeInput
+				erroDeInput,
+				erroDeData
 			};
-
-			// if (inputsCampo === null || erroDeInput){
-			// 	this.validarCampo(input);
-			// }
 		},
 
-		validarData: function () {
-			
-		},
+		_validarData: function (inputData) {
+			let dataInputada = inputData.getValue();
+			let estado = "None";
+			let erroDeValidacao = false;
+			let dataMinimaValida = new Date(1860, 1, 1).toISOString();
+			let dataMaximaValida = new Date().toISOString();
 
-		validarCampo: function () {
-			let estado = "None"; //estado do input 'vazio'
-			let erroDeValidacao = false; // variavel boolean 
-			let oBinding = input.getBinding("value");
+			if (dataInputada.length == 0) {
+				estado = "Error"
+				erroDeValidacao = true;
+			}
 			try {
-				oBinding.getType().validateValue(input.getValue());
+				var dataInputadaFormatada = new Date(dataInputada).toISOString();
+				if (dataInputadaFormatada > dataMinimaValida && dataInputadaFormatada < dataMaximaValida) {
+					erroDeValidacao = false;
+					estado = "None";
+				} else {
+					erroDeValidacao = true;
+					estado = "Error";
+				}
 			} catch (oException) {
 				estado = "Error";
 				erroDeValidacao = true;
 			}
-			input.setValueStateText("O campo deve conter 1-80 caracteres");
-			input.setValueState(estado);
+			inputData.setValueState(estado);
+			inputData.setValueStateText("A data deve ser válida e preenchida entre 1900 e hoje");
+			return erroDeValidacao;
 			
 		},
+
+		_validarCampo: function (input){
+			var estado = 'None';
+			var erroDeValidacao = false;
+			let valor = input.getValue();
+
+			try{
+				if(valor.length == 0 || valor.length > 80)
+					throw new Error();
+					
+			}catch(oException){
+				estado = "Error";
+				erroDeValidacao = true;
+				input.setValueStateText("O campo deve conter 1-80 caracteres");
+			}
+			input.setValueState(estado);
+			return erroDeValidacao;
+
+		}
 
 		
 	});
