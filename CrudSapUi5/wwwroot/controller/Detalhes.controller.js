@@ -54,8 +54,11 @@ sap.ui.define([
 				onClose: async function (oAction) {
 					if (oAction === 'OK') {
 						await repositorio.deletarLivro(excluirLivro);
-						alert("Deletado")
 					}
+					this.rota.navTo("overview", {
+							id: excluirLivro
+			
+						 });
 				},
 			});
 			// repositorio.deletarLivro(excluirLivro);
