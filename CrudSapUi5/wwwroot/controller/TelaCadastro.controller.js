@@ -10,7 +10,7 @@ sap.ui.define([
 ], function (Controller, History, JSONModel, MessageBox, Repositorio, Validacao) {
 	"use strict";
 
-	const inputNome ='inputNome';
+	const inputNome = 'inputNome';
 	const inputAutor = 'inputAutor';
 	const inputEditora = 'inputEditora';
 
@@ -44,30 +44,11 @@ sap.ui.define([
 
 		adicionarLivro: function (livroAserSalvo) {
 			let repositorio = new Repositorio;
-			MessageBox.confirm("Deseja realmente cadastrar este livro?", {
-				title: "Confirmação",
-				emphasizedAction: sap.m.MessageBox.Action.OK,
-				actions: [sap.m.MessageBox.Action.OK,
-					sap.m.MessageBox.Action.CANCEL
-				],
-				onClose:  function (oAction) {
-					if (oAction === 'OK') {
-						 repositorio.cadastrarLivro(livroAserSalvo),
-						this.rota.navTo("overview", {
-							codigo: livroAserSalvo.codigo
-			
-						 });
-						// alert("Cadastrado")
-					}
-				},
+			repositorio.cadastrarLivro(livroAserSalvo);
+			this.rota.navTo("overview", {
+				codigo: livroAserSalvo.codigo
+
 			});
-
-			// let repositorio = new Repositorio;
-			// repositorio.cadastrarLivro(livroAserSalvo);
-			// this.rota.navTo("overview", {
-			// 	codigo: livroAserSalvo.codigo
-
-			// });
 		},
 
 
@@ -95,8 +76,8 @@ sap.ui.define([
 
 			!erroDeValidacaoDeCampos && !erroDeValidacaoDeData ?
 				!livroASerSalvo.codigo ?
-				this.adicionarLivro(livroASerSalvo) :
-				this.editarLivro(livroASerSalvo) :
+					this.adicionarLivro(livroASerSalvo) :
+					this.editarLivro(livroASerSalvo) :
 				MessageBox.alert("Preencha todos os campos");
 		},
 
@@ -110,6 +91,32 @@ sap.ui.define([
 				this.rota.navTo("overview", {});
 			}
 		},
+
+		_confirmarRetornoDeNavegacao: function (rota) {
+			MessageBox.confirm("Ao voltar todas as alterações serão perdidas. Deseja continuar?", {
+				title: "Confirmação",
+				emphasizedAction: sap.m.MessageBox.Action.OK,
+				actions: [sap.m.MessageBox.Action.OK,
+					sap.m.MessageBox.Action.CANCEL
+				],
+				onClose: function (confirmacao) {
+					if (confirmacao === 'OK') {
+						this._navegarParaRota(rota, null);
+					}
+				}.bind(this)
+			});
+		},
+		_navegarParaRota(nomeDaRota, id = null) {
+			let rota = this.getOwnerComponent().getRouter();
+
+			!!id
+				?
+				rota.navTo(nomeDaRota, {
+					"id": id
+				}) :
+				rota.navTo(nomeDaRota);
+		},
+
 
 	});
 });
