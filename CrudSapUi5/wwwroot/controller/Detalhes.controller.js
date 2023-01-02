@@ -45,12 +45,25 @@ sap.ui.define([
 		aoClicarEmDeletar: function () {
 			let excluirLivro = this.getView().getModel("livro").getData().codigo
 			let repositorio = new Repositorio;
-			repositorio.deletarLivro(excluirLivro);
-			alert("deletado")
-			this.rota.navTo("overview", {
-				id: excluirLivro
-
+			MessageBox.confirm("Deseja excluir o livro?", {
+				title: "Confirmação",
+				emphasizedAction: sap.m.MessageBox.Action.OK,
+				actions: [sap.m.MessageBox.Action.OK,
+					sap.m.MessageBox.Action.CANCEL
+				],
+				onClose: async function (oAction) {
+					if (oAction === 'OK') {
+						await repositorio.deletarLivro(excluirLivro);
+						alert("Deletado")
+					}
+				},
 			});
+			// repositorio.deletarLivro(excluirLivro);
+			// alert("deletado")
+			// this.rota.navTo("overview", {
+			// 	id: excluirLivro
+
+			// });
 		},
 
 		aoClicarEmEditar: function () {
@@ -59,7 +72,8 @@ sap.ui.define([
 				id: idEditarLivro
 
 			});
-		}
+		},
+
 
 	});
 })

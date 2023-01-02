@@ -33,15 +33,72 @@ sap.ui.define([
 
 
 		buscarLivro: function (livroASerBuscadoPorId) {
-			const nomeDoModelo = "livro";
 			let repositorio = new Repositorio;
 			repositorio.buscarLivroPorId(livroASerBuscadoPorId)
 				.then(lista => {
 					let oModel = new JSONModel(lista);
-					this.getView().setModel(oModel, nomeDoModelo)
+					this.getView().setModel(oModel, "livro")
 				})
 		},
 
+
+		adicionarLivro: function (livroAserSalvo) {
+			let repositorio = new Repositorio;
+			MessageBox.confirm("Deseja realmente cadastrar este livro?", {
+				title: "Confirmação",
+				emphasizedAction: sap.m.MessageBox.Action.OK,
+				actions: [sap.m.MessageBox.Action.OK,
+					sap.m.MessageBox.Action.CANCEL
+				],
+				onClose:  function (oAction) {
+					if (oAction === 'OK') {
+						 repositorio.cadastrarLivro(livroAserSalvo),
+						this.rota.navTo("overview", {
+							codigo: livroAserSalvo.codigo
+			
+						 });
+						// alert("Cadastrado")
+					}
+				},
+			});
+
+			// let repositorio = new Repositorio;
+			// repositorio.cadastrarLivro(livroAserSalvo);
+			// this.rota.navTo("overview", {
+			// 	codigo: livroAserSalvo.codigo
+
+			// });
+		},
+
+
+		editarLivro: async function (livroEditado) {
+			let _repositorio = new Repositorio;
+			_repositorio.editarLivro(livroEditado);
+			this.rota.navTo("detalhes", {
+				codigo: livroEditado.codigo
+
+			});
+		},
+		aoClicarEmSalvar: function () {
+			let _validacaoLivro = new Validacao;
+			let telaCadastro = this.getView();
+			let inputs = [
+				telaCadastro.byId(inputNome),
+				telaCadastro.byId(inputAutor),
+				telaCadastro.byId(inputEditora),
+			];
+
+			let valorInputData = this.getView().byId("AnoPublicacao");
+			let erroDeValidacaoDeCampos = _validacaoLivro.ValidarCadastro(inputs, valorInputData).erroDeInput;
+			let erroDeValidacaoDeData = _validacaoLivro.ValidarCadastro(inputs, valorInputData).erroDeData;
+			let livroASerSalvo = this.getView().getModel("livro").getData();
+
+			!erroDeValidacaoDeCampos && !erroDeValidacaoDeData ?
+				!livroASerSalvo.codigo ?
+				this.adicionarLivro(livroASerSalvo) :
+				this.editarLivro(livroASerSalvo) :
+				MessageBox.alert("Preencha todos os campos");
+		},
 
 		aoClicarEmVoltar: function () {
 			var oHistory = History.getInstance();
@@ -54,68 +111,5 @@ sap.ui.define([
 			}
 		},
 
-
-		adicionarLivro: function (livroAserSalvo) {
-			let repositorio = new Repositorio;
-			repositorio.cadastrarLivro(livroAserSalvo);
-			this.rota.navTo("overview", {
-				id: livroAserSalvo.codigo
-
-			});
-		},
-
-
-		editarLivro: async function (livroEditado) {
-			let _repositorio = new Repositorio;
-			_repositorio.editarLivro(livroEditado);
-			this.rota.navTo("detalhes", {
-				id: livroEditado.codigo
-
-			});
-		},
-
-		aoClicarEmSalvar: function () {
-			let validacao = new Validacao;
-			 let telaDeCadastro = this.getView(),
-				 inputs = [
-					telaDeCadastro.byId(inputNome),
-					telaDeCadastro.byId(inputAutor),
-					telaDeCadastro.byId(inputEditora)
-				],
-
-				bErroDeValidacao = false;
-				inputs.forEach(function (input){
-					bErroDeValidacao = validacao.validacaoDeCampo(input) || bErroDeValidacao;
-				}, this)
-				let salvarLivro = this.getView().getModel("livro").getData();
-
-				if(!bErroDeValidacao){ // !  é o operador de negação. Ele retorna o contrário da resolução da operação o qual ele precede.
-					if (!!salvarLivro.codigo) {
-						this.editarLivro(salvarLivro)
-						alert("Livro editado com sucesso")
-					} else {
-						this.adicionarLivro(salvarLivro)
-						alert("Cadastrado")
-					 };
-				}else{
-					MessageBox.alert("Preencha os campos")
-				}
-		},
-
-		geradorDeMensagens: function(){
-			// let salvarLivro = this.getView().getModel("livro").getData();
-			// let validacao = new Validacao;
-			// let mensagemDeSucesso;
-			// let mensagemDeErro;
-			return MessageBox.confirm("Deseja concluir o cadastro?", {
-				title: "Confirmação",                                    
-				onClose: null,                                       
-				styleClass: "",                                      
-				actions: [ sap.m.MessageBox.Action.OK,
-						   sap.m.MessageBox.Action.CANCEL ],         
-				emphasizedAction: sap.m.MessageBox.Action.OK,       
-				initialFocus: null,                                      
-			});
-		}
 	});
 });
