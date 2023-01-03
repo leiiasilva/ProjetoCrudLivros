@@ -3,34 +3,36 @@ sap.ui.define([
 	"sap/ui/core/routing/History",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageBox",
-	"../servicos/Repositorio.controller"
+	"../servicos/RepositorioDeLivros"
 
-], function (Controller, History, JSONModel, MessageBox, Repositorio) {
+], function (Controller, History, JSONModel, MessageBox, RepositorioDeLivros) {
 	"use strict";
+
+	const nomeDoModelo = "livro";
+	const rotaDaLista = "overview";
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.Detalhes", {
 
 		rota: null,
 		onInit: function () {
+			const rotaDetalhes = "detalhes";
 			this.rota = this.getOwnerComponent().getRouter();
-			this.rota.getRoute("detalhes").attachPatternMatched(this.ajustarRota, this);
+			this.rota.getRoute(rotaDetalhes).attachPatternMatched(this.ajustarRota, this);
 		},
 
 		ajustarRota: function (evento) {
-			var mostrarDetalhes = evento.getParameter("arguments").id;
+			let mostrarDetalhes = evento.getParameter("arguments").id;
 			this.buscarLivroDaLista(mostrarDetalhes);
 		},
 
 		buscarLivroDaLista: function (livroASerExibido) {
-			const nomeDoModelo = "livro";
-			let repositorio = new Repositorio;
+			let repositorio = new RepositorioDeLivros;
 			repositorio.buscarLivroPorId(livroASerExibido)
 				.then(lista => {
-					let oModel = new JSONModel(lista);
-					this.getView().setModel(oModel, nomeDoModelo)
+					let modelo = new JSONModel(lista);
+					this.getView().setModel(modelo, nomeDoModelo)
 				})
 		},
-
 
 		aoClicarEmVoltar: function () {
 			var oHistory = History.getInstance();
@@ -38,45 +40,45 @@ sap.ui.define([
 			if (sPreviousHash !== undefined) {
 				window.history.go(-1);
 			} else {
-				this.rota.navTo("overview", {});
+				this.rota.navTo(rotaDaLista, {});
 			}
 		},
 
+		aoClicarEmEditar: function () {
+			const rotaEdicaoDeLivro = "editarLivro";
+			let idEditarLivro = this.getView().getModel(nomeDoModelo).getData().codigo
+			this.rota.navTo(rotaEdicaoDeLivro, {
+				id: idEditarLivro
+			});
+		},
+
 		aoClicarEmDeletar: function () {
-			let excluirLivro = this.getView().getModel("livro").getData().codigo
-			let repositorio = new Repositorio;
-			MessageBox.confirm("Deseja excluir o livro?", {
+			let excluirLivro = this.getView().getModel(nomeDoModelo).getData().codigo
+			let repositorio = new RepositorioDeLivros;
+			MessageBox.confirm("Deseja realmente deletar esse livro?", {
 				title: "Confirmação",
 				emphasizedAction: sap.m.MessageBox.Action.OK,
 				actions: [sap.m.MessageBox.Action.OK,
-					sap.m.MessageBox.Action.CANCEL
+				sap.m.MessageBox.Action.CANCEL
 				],
-				onClose: async function (oAction) {
+				onClose: function (oAction) {
 					if (oAction === 'OK') {
-						await repositorio.deletarLivro(excluirLivro);
+						repositorio.deletarLivro(excluirLivro);
+						this._navegarParaLista(rotaDaLista, null)
 					}
-					this.rota.navTo("overview", {
-							id: excluirLivro
-			
-						 });
-				},
-			});
-			// repositorio.deletarLivro(excluirLivro);
-			// alert("deletado")
-			// this.rota.navTo("overview", {
-			// 	id: excluirLivro
-
-			// });
-		},
-
-		aoClicarEmEditar: function () {
-			let idEditarLivro = this.getView().getModel("livro").getData().codigo
-			this.rota.navTo("editarLivro", {
-				id: idEditarLivro
-
+				}.bind(this)
 			});
 		},
 
-
+		_navegarParaLista(nomeDaRota, codigo) {
+			let rota = this.getOwnerComponent().getRouter();
+			if (codigo !== null) {
+				rota.navTo(nomeDaRota, {
+					"id": codigo
+				})
+			} else {
+				rota.navTo(nomeDaRota)
+			}
+		}
 	});
 })

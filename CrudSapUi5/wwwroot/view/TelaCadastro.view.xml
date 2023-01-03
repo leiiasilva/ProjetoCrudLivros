@@ -46,7 +46,8 @@
 		<l:HorizontalLayout
             class="sapUiContentPadding">
         	<l:content>            
-                <Button text="Salvar" press=".aoClicarEmSalvar"></Button>        
+                <Button text="Salvar" type="Emphasized" press=".aoClicarEmSalvar"></Button>
+				<Button text="Cancelar" type="Ghost" press=".aoClicarEmCancelar"></Button>        
             </l:content>
         </l:HorizontalLayout>
 	</l:VerticalLayout>
