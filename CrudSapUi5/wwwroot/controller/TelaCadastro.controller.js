@@ -3,16 +3,19 @@ sap.ui.define([
 	"sap/ui/core/routing/History",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageBox",
-	"../servicos/Repositorio.controller",
-	"../servicos/Validacao.controller"
+	"../servicos/RepositorioDeLivros",
+	"../servicos/ValidacaoDeLivros"
 
 
-], function (Controller, History, JSONModel, MessageBox, Repositorio, Validacao) {
+], function (Controller, History, JSONModel, MessageBox, RepositorioDeLivros, ValidacaoDeLivros) {
 	"use strict";
 
 	const inputNome = 'inputNome';
 	const inputAutor = 'inputAutor';
 	const inputEditora = 'inputEditora';
+	const nomeDoModelo = 'livro';
+	const rotaDaLista = "overview";
+	const rotaDetalhes = "detalhes";
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.TelaCadastro", {
 
@@ -27,58 +30,18 @@ sap.ui.define([
 				var idEditar = window.decodeURIComponent(evento.getParameter("arguments").id);
 				this.buscarLivro(idEditar)
 			} else {
-				this.getView().setModel(new sap.ui.model.json.JSONModel({}), "livro");
+				this.getView().setModel(new sap.ui.model.json.JSONModel({}), nomeDoModelo);
 			}
 		},
 
 
 		buscarLivro: function (livroASerBuscadoPorId) {
-			let repositorio = new Repositorio;
+			let repositorio = new RepositorioDeLivros;
 			repositorio.buscarLivroPorId(livroASerBuscadoPorId)
 				.then(lista => {
 					let oModel = new JSONModel(lista);
-					this.getView().setModel(oModel, "livro")
+					this.getView().setModel(oModel, nomeDoModelo)
 				})
-		},
-
-
-		adicionarLivro: function (livroAserSalvo) {
-			let repositorio = new Repositorio;
-			repositorio.cadastrarLivro(livroAserSalvo);
-			this.rota.navTo("overview", {
-				codigo: livroAserSalvo.codigo
-
-			});
-		},
-
-
-		editarLivro: async function (livroEditado) {
-			let _repositorio = new Repositorio;
-			_repositorio.editarLivro(livroEditado);
-			this.rota.navTo("detalhes", {
-				codigo: livroEditado.codigo
-
-			});
-		},
-		aoClicarEmSalvar: function () {
-			let _validacaoLivro = new Validacao;
-			let telaCadastro = this.getView();
-			let inputs = [
-				telaCadastro.byId(inputNome),
-				telaCadastro.byId(inputAutor),
-				telaCadastro.byId(inputEditora),
-			];
-
-			let valorInputData = this.getView().byId("AnoPublicacao");
-			let erroDeValidacaoDeCampos = _validacaoLivro.ValidarCadastro(inputs, valorInputData).erroDeInput;
-			let erroDeValidacaoDeData = _validacaoLivro.ValidarCadastro(inputs, valorInputData).erroDeData;
-			let livroASerSalvo = this.getView().getModel("livro").getData();
-
-			!erroDeValidacaoDeCampos && !erroDeValidacaoDeData ?
-				!livroASerSalvo.codigo ?
-					this.adicionarLivro(livroASerSalvo) :
-					this.editarLivro(livroASerSalvo) :
-				MessageBox.alert("Preencha todos os campos");
 		},
 
 		aoClicarEmVoltar: function () {
@@ -88,16 +51,60 @@ sap.ui.define([
 			if (sPreviousHash !== undefined) {
 				window.history.go(-1);
 			} else {
-				this.rota.navTo("overview", {});
+				this.rota.navTo(rotaDaLista, {});
 			}
 		},
 
-		_confirmarRetornoDeNavegacao: function (rota) {
-			MessageBox.confirm("Ao voltar todas as alterações serão perdidas. Deseja continuar?", {
+		adicionarLivro: async function (livroASerSalvo) {
+			let repositorio = new RepositorioDeLivros;
+			let result = await repositorio.cadastrarLivro(livroASerSalvo)
+			
+			this.rota.navTo(rotaDetalhes, {
+				id: result.codigo
+			});
+		},
+
+
+		editarLivro: async function (livroEditado) {
+			let _repositorio = new RepositorioDeLivros;
+			_repositorio.editarLivro(livroEditado);
+			this.rota.navTo(rotaDetalhes, {
+				id: livroEditado.codigo
+
+			});
+		},
+		aoClicarEmSalvar: function () {
+			const inputData = "AnoPublicacao";
+			let _validacaoLivro = new ValidacaoDeLivros;
+			let telaCadastro = this.getView();
+			let inputs = [
+				telaCadastro.byId(inputNome),
+				telaCadastro.byId(inputAutor),
+				telaCadastro.byId(inputEditora),
+			];
+
+			let valorInputData = this.getView().byId(inputData);
+			let erroDeValidacaoDeCampos = _validacaoLivro.ValidarCadastro(inputs, valorInputData).erroDeInput;
+			let erroDeValidacaoDeData = _validacaoLivro.ValidarCadastro(inputs, valorInputData).erroDeData;
+			let livroASerSalvo = this.getView().getModel(nomeDoModelo).getData();
+
+			!erroDeValidacaoDeCampos && !erroDeValidacaoDeData ?
+				!livroASerSalvo.codigo ?
+					this.adicionarLivro(livroASerSalvo) :
+					this.editarLivro(livroASerSalvo) :
+				MessageBox.alert("Preencha todos os campos");
+		},
+
+		aoClicarEmCancelar: function () {
+			this._retornoDeNavegacao(rotaDaLista);
+		},
+
+		_retornoDeNavegacao: function (rota) {
+			MessageBox.confirm("Ao voltar todas as informações serão perdidas. Deseja continuar?", {
 				title: "Confirmação",
 				emphasizedAction: sap.m.MessageBox.Action.OK,
 				actions: [sap.m.MessageBox.Action.OK,
-					sap.m.MessageBox.Action.CANCEL
+				sap.m.MessageBox.Action.CANCEL
 				],
 				onClose: function (confirmacao) {
 					if (confirmacao === 'OK') {
@@ -106,17 +113,15 @@ sap.ui.define([
 				}.bind(this)
 			});
 		},
-		_navegarParaRota(nomeDaRota, id = null) {
+		_navegarParaRota(nomeDaRota, codigo) {
 			let rota = this.getOwnerComponent().getRouter();
-
-			!!id
-				?
+			if (codigo !== null) {
 				rota.navTo(nomeDaRota, {
-					"id": id
-				}) :
-				rota.navTo(nomeDaRota);
-		},
-
-
+					"id": codigo
+				})
+			} else {
+				rota.navTo(nomeDaRota)
+			}
+		}
 	});
 });

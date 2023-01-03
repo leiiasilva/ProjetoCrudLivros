@@ -1,9 +1,9 @@
 sap.ui.define([
-	'sap/ui/core/mvc/Controller'
-], function (Controller,) {
+	"sap/ui/base/Object"
+], function (Object) {
 	"use strict";
 
-	return Controller.extend("sap.ui.demo.walkthrough.controller.Validacao", {
+	return Object.extend("sap.ui.demo.walkthrough.controller.ValidacaoDeLivros", {
 
 		ValidarCadastro: function (inputsDeCampo, data) {
 			let erroDeInput = false;

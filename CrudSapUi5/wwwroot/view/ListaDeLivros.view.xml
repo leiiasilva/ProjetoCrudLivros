@@ -15,7 +15,7 @@
 		}">
 		<headerToolbar>
 			<Toolbar>
-			<SearchField width="30%" search=".onFilterListaDeLivros"/>
+			<SearchField width="30%" search=".aoClicarEmPesquisar"/>
 				<ToolbarSpacer/>
 				<Button  icon="sap-icon://add"  press=".aoClicarEmAdicionar"/>
 			</Toolbar>
