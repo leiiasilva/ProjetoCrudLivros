@@ -1,13 +1,12 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	"sap/ui/core/routing/History",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageBox",
 	"../servicos/RepositorioDeLivros",
-	"../servicos/ValidacaoDeLivros"
+	"../servicos/ValidacaoDeLivros",
+	"../servicos/GeradorDeMensagem"
 
-
-], function (Controller, History, JSONModel, MessageBox, RepositorioDeLivros, ValidacaoDeLivros) {
+], function (Controller, JSONModel, MessageBox, RepositorioDeLivros, ValidacaoDeLivros, GeradorDeMensagem) {
 	"use strict";
 
 	const inputNome = 'inputNome';
@@ -45,20 +44,12 @@ sap.ui.define([
 		},
 
 		aoClicarEmVoltar: function () {
-			var oHistory = History.getInstance();
-			var sPreviousHash = oHistory.getPreviousHash();
-
-			if (sPreviousHash !== undefined) {
-				window.history.go(-1);
-			} else {
-				this.rota.navTo(rotaDaLista, {});
-			}
+			this.rota.navTo(rotaDaLista, {});
 		},
 
 		adicionarLivro: async function (livroASerSalvo) {
 			let repositorio = new RepositorioDeLivros;
-			let result = await repositorio.cadastrarLivro(livroASerSalvo)
-			
+			let result = await repositorio.cadastrarLivro(livroASerSalvo);
 			this.rota.navTo(rotaDetalhes, {
 				id: result.codigo
 			});
@@ -89,6 +80,7 @@ sap.ui.define([
 			let livroASerSalvo = this.getView().getModel(nomeDoModelo).getData();
 
 			!erroDeValidacaoDeCampos && !erroDeValidacaoDeData ?
+				
 				!livroASerSalvo.codigo ?
 					this.adicionarLivro(livroASerSalvo) :
 					this.editarLivro(livroASerSalvo) :
@@ -122,6 +114,23 @@ sap.ui.define([
 			} else {
 				rota.navTo(nomeDaRota)
 			}
-		}
+		},
+
+		_paraConfirmarCadastro: function(rota){
+            MessageBox.confirm("Deseja realmente cadastrar esse livro",{
+                title: "Confirmação",
+				emphasizedAction: sap.m.MessageBox.Action.OK,
+                actions: [
+                    sap.m.MessageBox.Action.OK,
+                    sap.M.MessageBox.Action.CANCEL
+                ],
+                onClose: function(oAction){
+                    if(oAction === 'OK'){
+                        // MessageBox.show("Livro Cadastrado")
+                        this._navegarParaRota(rota, null);
+                    }
+                }.bind(this)
+            })
+        },
 	});
 });
