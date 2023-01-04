@@ -1,3 +1,5 @@
+using Dominio;
+using Infraestrutura;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -13,7 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddScoped<IRepositorio, RepositorioDB>();
+builder.Services.AddScoped<IRepositorioWeb, RepositorioLinqToDB>();
 
 var app = builder.Build();
 

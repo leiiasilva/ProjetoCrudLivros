@@ -1,6 +1,6 @@
 ﻿namespace ProjetoCrud
 {
-    public interface IRepositorio
+    public interface IRepositorio<Livro>
     {
         void Cadastrar(Livro livro);
         void Editar(Livro livro);

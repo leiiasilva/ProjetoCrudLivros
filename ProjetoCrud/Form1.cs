@@ -5,8 +5,8 @@ namespace ProjetoCrud
     public partial class Form1 : Form
     {
         //ALTERAR O REPOSITÓRIO PARA UTILIZAR INJEÇÃO DE DEPENDÊNCIA COM INTERFACE
-        private readonly IRepositorio _repositorio;
-        public Form1(IRepositorio repositorio)
+        private readonly IRepositorio<Livro> _repositorio;
+        public Form1(IRepositorio<Livro> repositorio)
         {
             InitializeComponent();
             _repositorio = repositorio;

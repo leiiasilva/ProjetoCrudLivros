@@ -3,9 +3,10 @@ sap.ui.define([
 	"sap/ui/core/routing/History",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageBox",
+	"sap/m/MessageToast",
 	"../servicos/RepositorioDeLivros"
 
-], function (Controller, History, JSONModel, MessageBox, RepositorioDeLivros) {
+], function (Controller, History, JSONModel, MessageBox, MessageToast, RepositorioDeLivros) {
 	"use strict";
 
 	const nomeDoModelo = "livro";
@@ -35,13 +36,7 @@ sap.ui.define([
 		},
 
 		aoClicarEmVoltar: function () {
-			var oHistory = History.getInstance();
-			var sPreviousHash = oHistory.getPreviousHash();
-			if (sPreviousHash !== undefined) {
-				window.history.go(-1);
-			} else {
-				this.rota.navTo(rotaDaLista, {});
-			}
+			this.rota.navTo(rotaDaLista, {});
 		},
 
 		aoClicarEmEditar: function () {
@@ -63,11 +58,22 @@ sap.ui.define([
 				],
 				onClose: function (oAction) {
 					if (oAction === 'OK') {
-						repositorio.deletarLivro(excluirLivro);
-						this._navegarParaLista(rotaDaLista, null)
-					}
+						repositorio.deletarLivro(excluirLivro)
+						MessageBox.success("Deletado",{
+							actions: [sap.m.MessageBox.Action.OK,
+						],
+						onClose: function(confirmacao){
+							if(confirmacao === 'OK'){
+								this._navegarParaLista(rotaDaLista, null)
+							}
+						}
+						})
+						// this._navegarParaLista(rotaDaLista, null)
+					} 
 				}.bind(this)
 			});
+			
+			
 		},
 
 		_navegarParaLista(nomeDaRota, codigo) {

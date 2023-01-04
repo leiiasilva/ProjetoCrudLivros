@@ -1,12 +1,13 @@
 ﻿namespace ProjetoCrud
 {
-    public class Repositorio : IRepositorio
+    public class Repositorio : IRepositorio<Livro>
     {
-        private List<Livro> ListaDeLivros = Singleton.Instance();
+        protected List<Livro> ListaDeLivros = Singleton.Instance();
         public void Cadastrar(Livro livro)
         {
             livro.Codigo = Singleton.IdInserir();
             ListaDeLivros.Add(livro);
+            
         }
 
         public void Editar(Livro livroEditado)

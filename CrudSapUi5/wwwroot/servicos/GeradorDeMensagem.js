@@ -1,9 +1,10 @@
 sap.ui.define([
+    "sap/ui/base/Object",
     "sap/m/MessageBox"
-], function(MessageBox) {
+], function(Object, MessageBox) {
     'use strict';
 
-    return Controller.extend("sap.ui.demo.walkthrough.controller.GeradorDeMensagem", {
+    return Object.extend("sap.ui.demo.walkthrough.controller.GeradorDeMensagem", {
 
         paraConfirmarCadastro: function(){
             MessageBox.confirm("Deseja realmente cadastrar esse livro",{
@@ -16,11 +17,23 @@ sap.ui.define([
                 onClose: function(oAction){
                     if(oAction == 'OK'){
                         MessageBox.show("Livro Cadastrado")
+                        // this._navegarParaRota(rota, null);
                     }
 
                 }
             })
-        }
+        },
+
+        _navegarParaRota(nomeDaRota, codigo) {
+			let rota = this.getOwnerComponent().getRouter();
+			if (codigo !== null) {
+				rota.navTo(nomeDaRota, {
+					"id": codigo
+				})
+			} else {
+				rota.navTo(nomeDaRota)
+			}
+		}
 
 
     })
