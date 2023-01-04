@@ -1,4 +1,5 @@
-﻿using LinqToDB;
+﻿using Dominio;
+using LinqToDB;
 using ProjetoCrud;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -7,7 +8,7 @@ using SqlServerTools = LinqToDB.DataProvider.SqlServer.SqlServerTools;
 
 namespace Infraestrutura
 {
-    public class RepositorioLinqToDB : IRepositorio
+    public class RepositorioLinqToDB : IRepositorioWeb
     {
        public static string conexao()
         {
@@ -15,12 +16,14 @@ namespace Infraestrutura
             return stringConexao;
         }
 
-        public void Cadastrar(Livro livro)
+        public int Cadastrar(Livro livro)
         {
             using var bancoDeDados = SqlServerTools.CreateDataConnection(conexao());
             try
             {
-                bancoDeDados.Insert(livro);
+                var idDoLivroAdicionado = bancoDeDados.InsertWithInt32Identity(livro);
+                return idDoLivroAdicionado;
+                //bancoDeDados.Insert(livro);
             }
             catch(SqlException ex)
             {
@@ -42,12 +45,14 @@ namespace Infraestrutura
             }
         }
 
-        public void Editar(Livro livroEditar)
+        public Livro Editar(Livro livroEditar)
         {
             using var bancoDeDados = SqlServerTools.CreateDataConnection(conexao());
             try
             {
                 bancoDeDados.Update(livroEditar);
+                return BuscarPorId(livroEditar.Codigo);
+            //    bancoDeDados.Update(livroEditar);
             }
             catch (SqlException ex)
             {

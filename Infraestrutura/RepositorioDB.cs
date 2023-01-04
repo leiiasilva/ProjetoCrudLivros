@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 
 namespace ProjetoCrud
 {
-    public class RepositorioDB : IRepositorio
+    public class RepositorioDB : IRepositorio<Livro>
     {
         public SqlConnection conexao()
         {

@@ -1,3 +1,4 @@
+using Dominio;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoCrud;
 
@@ -7,9 +8,9 @@ namespace CrudSapUi5.Controllers
     [Route("[controller]")]
     public class CrudLivroController : ControllerBase
     {
-        private readonly IRepositorio _repositorio;
+        private readonly IRepositorioWeb _repositorio;
 
-        public CrudLivroController(IRepositorio repositorio)
+        public CrudLivroController(IRepositorioWeb repositorio)
         {
             try
             {
@@ -64,8 +65,12 @@ namespace CrudSapUi5.Controllers
         {
             try
             {
-                _repositorio.Cadastrar(livro);
-                return Ok(livro);
+                var id = _repositorio.Cadastrar(livro);
+                livro.Codigo = id;
+                return Created($"livro/{livro.Codigo}", livro);
+
+                //_repositorio.Cadastrar(livro);
+                //return Ok(livro);
             }
             catch (Exception)
             {
