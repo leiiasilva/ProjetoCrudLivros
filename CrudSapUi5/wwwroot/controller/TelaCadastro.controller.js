@@ -47,7 +47,46 @@ sap.ui.define([
 			this.rota.navTo(rotaDaLista, {});
 		},
 
-		adicionarLivro: async function (livroASerSalvo) {
+		adicionarLivro: function (livroASerSalvo) {
+			MessageBox.confirm("Deseja realmente cadastrar esse livro", {
+				title: "Confirmação",
+				emphasizedAction: sap.m.MessageBox.Action.OK,
+				actions: [
+					sap.m.MessageBox.Action.OK,
+					sap.m.MessageBox.Action.CANCEL
+				],
+				onClose: async function (oAction) {
+					if (oAction === 'OK') {
+						this._paraConfirmarCadastro(livroASerSalvo)
+					}
+				}.bind(this)
+			})
+			// let repositorio = new RepositorioDeLivros;
+			// let result = await repositorio.cadastrarLivro(livroASerSalvo);
+			// this.rota.navTo(rotaDetalhes, {
+			// 	id: result.codigo
+			// });
+		},
+
+
+		_paraConfirmarCadastro:  function (livroASerSalvo) {
+			MessageBox.success("Livro cadastrado com sucesso", {
+				actions: [sap.m.MessageBox.Action.OK],
+				onClose:  function (confirmacao) {
+					if (confirmacao === 'OK') {
+						this._confirmacaoDeCadastro(livroASerSalvo)
+					}
+				}.bind(this)
+			})
+
+			// let repositorio = new RepositorioDeLivros;
+			// let result = await repositorio.cadastrarLivro(livroASerSalvo);
+			// this.rota.navTo(rotaDetalhes, {
+			// 	id: result.codigo
+			// });
+		},
+
+		_confirmacaoDeCadastro:async function (livroASerSalvo) {
 			let repositorio = new RepositorioDeLivros;
 			let result = await repositorio.cadastrarLivro(livroASerSalvo);
 			this.rota.navTo(rotaDetalhes, {
@@ -56,14 +95,22 @@ sap.ui.define([
 		},
 
 
-		editarLivro: async function (livroEditado) {
-			let _repositorio = new RepositorioDeLivros;
-			_repositorio.editarLivro(livroEditado);
-			this.rota.navTo(rotaDetalhes, {
-				id: livroEditado.codigo
+		editarLivro: function (livroEditado) {
+			MessageBox.success("Livro editado com sucesso", {
+				actions: [sap.m.MessageBox.Action.OK],
+				onClose: function (confirmacao) {
+					if (confirmacao === 'OK') {
+						let _repositorio = new RepositorioDeLivros;
+						_repositorio.editarLivro(livroEditado);
+						this.rota.navTo(rotaDetalhes, {
+							id: livroEditado.codigo
 
-			});
+						});
+					}
+				}.bind(this)
+			})
 		},
+
 		aoClicarEmSalvar: function () {
 			const inputData = "AnoPublicacao";
 			let _validacaoLivro = new ValidacaoDeLivros;
@@ -80,7 +127,7 @@ sap.ui.define([
 			let livroASerSalvo = this.getView().getModel(nomeDoModelo).getData();
 
 			!erroDeValidacaoDeCampos && !erroDeValidacaoDeData ?
-				
+
 				!livroASerSalvo.codigo ?
 					this.adicionarLivro(livroASerSalvo) :
 					this.editarLivro(livroASerSalvo) :
@@ -116,21 +163,6 @@ sap.ui.define([
 			}
 		},
 
-		_paraConfirmarCadastro: function(rota){
-            MessageBox.confirm("Deseja realmente cadastrar esse livro",{
-                title: "Confirmação",
-				emphasizedAction: sap.m.MessageBox.Action.OK,
-                actions: [
-                    sap.m.MessageBox.Action.OK,
-                    sap.M.MessageBox.Action.CANCEL
-                ],
-                onClose: function(oAction){
-                    if(oAction === 'OK'){
-                        // MessageBox.show("Livro Cadastrado")
-                        this._navegarParaRota(rota, null);
-                    }
-                }.bind(this)
-            })
-        },
+
 	});
 });

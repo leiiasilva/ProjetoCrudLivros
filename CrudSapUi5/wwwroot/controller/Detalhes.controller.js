@@ -1,12 +1,11 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	"sap/ui/core/routing/History",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageBox",
 	"sap/m/MessageToast",
 	"../servicos/RepositorioDeLivros"
 
-], function (Controller, History, JSONModel, MessageBox, MessageToast, RepositorioDeLivros) {
+], function (Controller, JSONModel, MessageBox, MessageToast, RepositorioDeLivros) {
 	"use strict";
 
 	const nomeDoModelo = "livro";
@@ -40,6 +39,26 @@ sap.ui.define([
 		},
 
 		aoClicarEmEditar: function () {
+			MessageBox.confirm("Deseja realmente editar esse Livro",{
+				title: "Confirmação",
+				actions: [
+					sap.m.MessageBox.Action.OK,
+					sap.m.MessageBox.Action.CANCEL
+				],
+				onClose: function(confirmacao){
+					if(confirmacao === 'OK'){
+						this._aoConfirmarEditar();
+					}
+				}.bind(this)
+			})
+			// const rotaEdicaoDeLivro = "editarLivro";
+			// let idEditarLivro = this.getView().getModel(nomeDoModelo).getData().codigo
+			// this.rota.navTo(rotaEdicaoDeLivro, {
+			// 	id: idEditarLivro
+			// });
+		},
+
+		_aoConfirmarEditar: function(){
 			const rotaEdicaoDeLivro = "editarLivro";
 			let idEditarLivro = this.getView().getModel(nomeDoModelo).getData().codigo
 			this.rota.navTo(rotaEdicaoDeLivro, {
@@ -47,9 +66,18 @@ sap.ui.define([
 			});
 		},
 
+		// _mensagemDeSucessoEdicao: function(){
+		// 	MessageBox.success("Livro deletado com sucesso", {
+		// 		actions: [sap.m.MessageBox.Action.OK],
+		// 		onClose: function (confirmacao) {
+		// 			if (confirmacao === 'OK') {
+		// 			 this._navegarParaLista(rotaDaLista, null)
+		// 			}
+		// 		}.bind(this)
+		// 	})
+		// },
+
 		aoClicarEmDeletar: function () {
-			let excluirLivro = this.getView().getModel(nomeDoModelo).getData().codigo
-			let repositorio = new RepositorioDeLivros;
 			MessageBox.confirm("Deseja realmente deletar esse livro?", {
 				title: "Confirmação",
 				emphasizedAction: sap.m.MessageBox.Action.OK,
@@ -58,22 +86,38 @@ sap.ui.define([
 				],
 				onClose: function (oAction) {
 					if (oAction === 'OK') {
-						repositorio.deletarLivro(excluirLivro)
-						MessageBox.success("Deletado",{
-							actions: [sap.m.MessageBox.Action.OK,
-						],
-						onClose: function(confirmacao){
-							if(confirmacao === 'OK'){
-								this._navegarParaLista(rotaDaLista, null)
-							}
-						}
-						})
-						// this._navegarParaLista(rotaDaLista, null)
-					} 
+						this._aoConfirmarDeletar();
+					}
 				}.bind(this)
 			});
-			
-			
+
+
+		},
+
+		_aoConfirmarDeletar: function () {
+			let excluirLivro = this.getView().getModel(nomeDoModelo).getData().codigo
+			let repositorio = new RepositorioDeLivros;
+			repositorio.deletarLivro(excluirLivro)
+			return this._mensagemDeSucesso();
+			// MessageBox.success("Livro deletado com sucesso", {
+			// 	actions: [sap.m.MessageBox.Action.OK],
+			// 	onClose: function (confirmacao) {
+			// 		if (confirmacao === 'OK') {
+			// 		 this._navegarParaLista(rotaDaLista, null)
+			// 		}
+			// 	}.bind(this)
+			// })
+		},
+		
+		_mensagemDeSucesso: function(){
+			MessageBox.success("Livro deletado com sucesso", {
+				actions: [sap.m.MessageBox.Action.OK],
+				onClose: function (confirmacao) {
+					if (confirmacao === 'OK') {
+					 this._navegarParaLista(rotaDaLista, null)
+					}
+				}.bind(this)
+			})
 		},
 
 		_navegarParaLista(nomeDaRota, codigo) {
@@ -85,6 +129,6 @@ sap.ui.define([
 			} else {
 				rota.navTo(nomeDaRota)
 			}
-		}
+		},
 	});
 })
