@@ -8,45 +8,49 @@ sap.ui.define([
 ], function (Controller, JSONModel, Filter, FilterOperator, RepositorioDeLivros) {
 	"use strict";
 
+	const caminho = "sap.ui.demo.walkthrough.controller.ListaDeLivros";
 	const nomeDaLista = "listaDeLivros";
-	return Controller.extend("sap.ui.demo.walkthrough.controller.ListaDeLivros", {
+
+	return Controller.extend(caminho, {
 
 		rota: null,
+		_repositorio: null,
 		onInit: function () {
 			const rotaTelaPrincipal = "overview";
 			this.rota = this.getOwnerComponent().getRouter();
-			this.rota.getRoute(rotaTelaPrincipal).attachPatternMatched(this.ajustarRota, this);
+			this.rota.getRoute(rotaTelaPrincipal).attachPatternMatched(this._ajustarRota, this);
+			this._repositorio = new RepositorioDeLivros;
 		},
 
-		ajustarRota: function () {
+		_ajustarRota: function () {
 			this.buscarLivrosDoBancoDeDados();
 		},
 
-		buscarLivrosDoBancoDeDados: function () {
-			let repositorio = new RepositorioDeLivros;
-			repositorio.buscarTodosOsLivros()
-				.then(lista => {
-					let oModel = new JSONModel(lista);
-					this.getView().setModel(oModel, nomeDaLista)
-				})
+		buscarLivrosDoBancoDeDados: async function () { // verificar o then.. colocar async await
+			await this._repositorio.buscarTodosOsLivros()
+			let lista;
+			let modelo = new JSONModel(lista);
+			await this.getView().setModel(modelo, nomeDaLista)
+				// .then(lista => {
+				// 	let oModel = new JSONModel(lista);
+				// 	this.getView().setModel(oModel, nomeDaLista)
+				// })
 		},
 
 		aoClicarEmPesquisar: function (evento) {
+			const consulta = "query";
+			const items = "items";
 			const filtroSelecionado = "nome";
 			let livrosBuscados = []; 
-			let parametroPesquisa = evento.getParameter("query");
+			let parametroPesquisa = evento.getParameter(consulta);
 			if (parametroPesquisa) {
 				livrosBuscados.push(new Filter(filtroSelecionado, FilterOperator.Contains, parametroPesquisa));
 			}
 			let listaDeLivros = this.byId(nomeDaLista);
-			let buscarLivro = listaDeLivros.getBinding("items");
+			let buscarLivro = listaDeLivros.getBinding(items);
 			buscarLivro.filter(livrosBuscados);
 		},
 
-		aoClicarEmAdicionar: function () {
-			const rotaDeCadastro = "telaCadastro";
-			this._navegarParaRota(rotaDeCadastro, null);
-		},
 
 		aoClicarNoLivroDaLista: function (evento) {
 			const codigoDoLivro = "codigo";
@@ -57,12 +61,16 @@ sap.ui.define([
 			});
 		},
 
+		aoClicarEmAdicionar: function () {
+			const rotaDeCadastro = "telaCadastro";
+			this._navegarParaRota(rotaDeCadastro, null);
+		},
+
 		_navegarParaRota(nomeDaRota, parametroDaRota = null) {
-			let rota = this.getOwnerComponent().getRouter();
 			(parametroDaRota !== null) ?
-			rota.navTo(nomeDaRota, {
+			this.rota.navTo(nomeDaRota, {
 				"id": parametroDaRota
-			}): rota.navTo(nomeDaRota)
+			}): this.rota.navTo(nomeDaRota)
 		}
 	});
 });

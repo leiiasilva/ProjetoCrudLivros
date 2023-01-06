@@ -9,6 +9,7 @@ sap.ui.define([
 ], function (Controller, JSONModel, MessageBox, RepositorioDeLivros, ValidacaoDeLivros, GeradorDeMensagem) {
 	"use strict";
 
+	const caminho = "sap.ui.demo.walkthrough.controller.TelaCadastro"
 	const inputNome = 'inputNome';
 	const inputAutor = 'inputAutor';
 	const inputEditora = 'inputEditora';
@@ -17,20 +18,23 @@ sap.ui.define([
 	const rotaDetalhes = "detalhes";
 	let mensagem = new GeradorDeMensagem;
 
-	return Controller.extend("sap.ui.demo.walkthrough.controller.TelaCadastro", {
+	return Controller.extend(caminho, {
 
 		rota: null,
+		_repositorio: null,
 		onInit: function () {
 			this.rota = this.getOwnerComponent().getRouter();
 			this.rota.attachRoutePatternMatched(this._ajustarRota, this);
+			this._repositorio = new RepositorioDeLivros;
 		},
 
 		_ajustarRota: function (evento) {
+			const parametro = "arguments";
 			const nomeParametro = "name";
 			const rotaEditarLivro = "editarLivro";
 			this.resetarTela();
 			if (evento.getParameter(nomeParametro) == rotaEditarLivro) {
-				var idEditar = window.decodeURIComponent(evento.getParameter("arguments").id);
+				var idEditar = window.decodeURIComponent(evento.getParameter(parametro).id);
 				this.buscarLivro(idEditar)
 			} else {
 				this.getView().setModel(new sap.ui.model.json.JSONModel({}), nomeDoModelo);
@@ -39,8 +43,7 @@ sap.ui.define([
 
 
 		buscarLivro: function (livroASerBuscadoPorId) {
-			let repositorio = new RepositorioDeLivros;
-			repositorio.buscarLivroPorId(livroASerBuscadoPorId)
+			this._repositorio.buscarLivroPorId(livroASerBuscadoPorId)
 				.then(lista => {
 					let oModel = new JSONModel(lista);
 					this.getView().setModel(oModel, nomeDoModelo)
@@ -59,25 +62,20 @@ sap.ui.define([
 		},
 
 		_confirmacaoDeCadastro: async function () {
-			let repositorio = new RepositorioDeLivros,
-				livroASerSalvo = this.getView().getModel(nomeDoModelo).getData();
-			let livroASerCadastrado = await repositorio.cadastrarLivro(livroASerSalvo)
-			.then((resposta) => {
-				 mensagem.mensagemDeSucesso("Livro Cadastrado com sucesso")
-				 return resposta;
-			})
-			 this.rota.navTo(rotaDetalhes, {
+			let	livroASerSalvo = this.getView().getModel(nomeDoModelo).getData();
+			let livroASerCadastrado = await this._repositorio.cadastrarLivro(livroASerSalvo);
+			await mensagem.mensagemDeSucesso("Livro Cadastrado com sucesso");
+
+			this.rota.navTo(rotaDetalhes, {
 				id: livroASerCadastrado.codigo
 			});
 		},
 
 
-		editarLivro: function (livroEditado) {
-			let _repositorio = new RepositorioDeLivros;
-			_repositorio.editarLivro(livroEditado)
-				.then(() => {
-					mensagem.mensagemDeSucesso("Livro editado com sucesso")
-				})
+		editarLivro: async function (livroEditado) {
+			await this._repositorio.editarLivro(livroEditado);
+			await mensagem.mensagemDeSucesso("Livro editado com sucesso");
+
 			this.rota.navTo(rotaDetalhes, {
 				id: livroEditado.codigo
 			});

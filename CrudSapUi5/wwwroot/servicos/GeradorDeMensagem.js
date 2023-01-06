@@ -4,33 +4,47 @@ sap.ui.define([
 ], function (Object, MessageBox) {
     'use strict';
 
-    return Object.extend("sap.ui.demo.walkthrough.controller.GeradorDeMensagem", {
+    const extensao = "sap.ui.demo.walkthrough.controller.GeradorDeMensagem";
+    
+
+    return Object.extend(extensao, {
 
         MensagemComFuncao: function (tipo, texto, funcao) {
-            if (tipo == "warning")
-                MessageBox.warning(texto, this._funcaoPorEscolha(funcao));
-            else if (tipo == "confirm")
-                MessageBox.confirm(texto, this._funcaoPorEscolha(funcao));
+            return new Promise((resolve, reject) => {
+                const acao = 'OK';
+
+                let opcoes = {
+                    actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+                    emphasizedAction: MessageBox.Action.OK,
+                    onClose: (escolha) => {
+                        if (escolha === acao){
+                            funcao.call(this);
+                        }
+                        resolve();
+                    }
+                }
+
+                if (tipo == "warning")
+                    MessageBox.warning(texto, opcoes);
+                else if (tipo == "confirm")
+                    MessageBox.confirm(texto, opcoes);
+            });
         },
 
         MensagemErro: function (texto) {
-            MessageBox.error(texto);
-        },
-
-        _funcaoPorEscolha: function (funcao) {
-            return {
-                actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
-                emphasizedAction: MessageBox.Action.OK,
-                onClose: (escolha) => {
-                    if (escolha === 'OK')
-                        funcao.call(this);
-                }
-            }
+            return new Promise((resolve, reject) => {
+                MessageBox.error(texto, {
+                    onClose: resolve
+                });
+            });
         },
 
         mensagemDeSucesso: function (texto) {
-            MessageBox.success(texto)
-
+            return new Promise((resolve, reject) => {
+                MessageBox.success(texto, {
+                    onClose: resolve
+                });
+            });
         },
     })
 

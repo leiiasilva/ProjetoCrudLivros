@@ -1,34 +1,36 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
-	"sap/m/MessageBox",
 	"../servicos/RepositorioDeLivros",
 	"../servicos/GeradorDeMensagem"
 
-], function (Controller, JSONModel, MessageBox, RepositorioDeLivros, GeradorDeMensagem) {
+], function (Controller, JSONModel, RepositorioDeLivros, GeradorDeMensagem) {
 	"use strict";
 
+	const caminho = "sap.ui.demo.walkthrough.controller.Detalhes";
 	const nomeDoModelo = "livro";
 	const rotaDaLista = "overview";
 	let mensagem = new GeradorDeMensagem;
 
-	return Controller.extend("sap.ui.demo.walkthrough.controller.Detalhes", {
+	return Controller.extend(caminho, {
 
 		rota: null,
+		_repositorio: null, //propriedade
 		onInit: function () {
 			const rotaDetalhes = "detalhes";
 			this.rota = this.getOwnerComponent().getRouter();
-			this.rota.getRoute(rotaDetalhes).attachPatternMatched(this.ajustarRota, this);
+			this.rota.getRoute(rotaDetalhes).attachPatternMatched(this._ajustarRota, this);
+			this._repositorio =  new RepositorioDeLivros;
 		},
 
-		ajustarRota: function (evento) {
-			let mostrarDetalhes = evento.getParameter("arguments").id;
+		_ajustarRota: function (evento) {
+			const parametro = "arguments";
+			let mostrarDetalhes = evento.getParameter(parametro).id;
 			this.buscarLivroDaLista(mostrarDetalhes);
 		},
 
-		buscarLivroDaLista: function (livroASerExibido) {
-			let repositorio = new RepositorioDeLivros;
-			repositorio.buscarLivroPorId(livroASerExibido)
+		buscarLivroDaLista: function (livroASerExibido) { // verificar para arrumar o then e usar async e await
+			this._repositorio.buscarLivroPorId(livroASerExibido)
 				.then(lista => {
 					let modelo = new JSONModel(lista);
 					this.getView().setModel(modelo, nomeDoModelo)
@@ -39,11 +41,11 @@ sap.ui.define([
 			this.rota.navTo(rotaDaLista, {});
 		},
 
-		aoClicarEmEditar: function () {
+		aoClicarEmEditar: async function () {
 			const texto = "Deseja realmente editar esse Livro";
 			const tipo = "confirm";
 			let funcao = this._aoConfirmarEditar.bind(this);
-			mensagem.MensagemComFuncao(tipo, texto, funcao)
+			await mensagem.MensagemComFuncao(tipo, texto, funcao);
 		},
 
 		_aoConfirmarEditar: function () {
@@ -54,35 +56,28 @@ sap.ui.define([
 			});
 		},
 
-		aoClicarEmDeletar: function () {
+		aoClicarEmDeletar: async  function () {
 			const texto = "Deseja realmente deletar esse livro?";
 			const tipo = "confirm";
 			let funcao = this._aoConfirmarDeletar.bind(this);
-			mensagem.MensagemComFuncao(tipo, texto, funcao)
+			await mensagem.MensagemComFuncao(tipo, texto, funcao);
 		},
 
-		_aoConfirmarDeletar: function () {
+		_aoConfirmarDeletar: async function () {
 			let excluirLivro = this.getView().getModel(nomeDoModelo).getData().codigo
-			let repositorio = new RepositorioDeLivros;
-			repositorio.deletarLivro(excluirLivro)
-				.then((resposta) => {
-					if (resposta && resposta.status == 200) {
-						mensagem.mensagemDeSucesso("Deletado com sucesso")
-					} else {
-						mensagem.MensagemErro("Falha ao deletar livro")
-					}
+			this._repositorio.deletarLivro(excluirLivro);
+			 await mensagem.mensagemDeSucesso("Livro deletado com sucesso");
+			 this._navegarParaLista(rotaDaLista, null);
 
-				}, this._navegarParaLista(rotaDaLista, null))
 		},
 
-		_navegarParaLista(nomeDaRota, codigo) {
-			let rota = this.getOwnerComponent().getRouter();
+		_navegarParaLista(nomeDaRota, codigo) { // verificar sobre a string 'codigo'
 			if (codigo !== null) {
-				rota.navTo(nomeDaRota, {
-					"id": codigo
-				})
+				this.rota.navTo(nomeDaRota, {
+					"codigo": codigo
+				});
 			} else {
-				rota.navTo(nomeDaRota)
+				this.rota.navTo(nomeDaRota)
 			}
 		},
 	});
