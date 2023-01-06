@@ -26,7 +26,7 @@ sap.ui.define([
 		},
 
 		_ajustarRota: function (evento) {
-			const  nomeParametro = "name";
+			const nomeParametro = "name";
 			const rotaEditarLivro = "editarLivro";
 			this.resetarTela();
 			if (evento.getParameter(nomeParametro) == rotaEditarLivro) {
@@ -51,30 +51,23 @@ sap.ui.define([
 			this.rota.navTo(rotaDaLista, {});
 		},
 
-		adicionarLivro: function (livroASerSalvo) {
+		adicionarLivro: async function () {
 			const texto = "Deseja realmente cadastrar esse livro?";
 			const tipo = "confirm";
-			let funcao = this._paraConfirmarCadastro(livroASerSalvo)
+			let funcao = this._confirmacaoDeCadastro.bind(this)
 			mensagem.MensagemComFuncao(tipo, texto, funcao)
 		},
 
-
-		_paraConfirmarCadastro: function (livroASerSalvo) {
-			MessageBox.success("Livro cadastrado com sucesso", {
-				actions: [sap.m.MessageBox.Action.OK],
-				onClose: function (confirmacao) {
-					if (confirmacao === 'OK') {
-						this._confirmacaoDeCadastro(livroASerSalvo)
-					}
-				}.bind(this)
+		_confirmacaoDeCadastro: async function () {
+			let repositorio = new RepositorioDeLivros,
+				livroASerSalvo = this.getView().getModel(nomeDoModelo).getData();
+			let livroASerCadastrado = await repositorio.cadastrarLivro(livroASerSalvo)
+			.then((resposta) => {
+				 mensagem.mensagemDeSucesso("Livro Cadastrado com sucesso")
+				 return resposta;
 			})
-		},
-
-		_confirmacaoDeCadastro: async function (livroASerSalvo) {
-			let repositorio = new RepositorioDeLivros;
-			let result = await repositorio.cadastrarLivro(livroASerSalvo);
-			this.rota.navTo(rotaDetalhes, {
-				id: result.codigo
+			 this.rota.navTo(rotaDetalhes, {
+				id: livroASerCadastrado.codigo
 			});
 		},
 
@@ -94,7 +87,7 @@ sap.ui.define([
 			this._validacaoDeCampos();
 		},
 
-		_validacaoDeCampos: function(){
+		_validacaoDeCampos: function () {
 			const inputData = "AnoPublicacao";
 			let _validacaoLivro = new ValidacaoDeLivros;
 			let telaCadastro = this.getView();
@@ -112,7 +105,7 @@ sap.ui.define([
 			!erroDeValidacaoDeCampos && !erroDeValidacaoDeData ?
 
 				!livroASerSalvo.codigo ?
-					this.adicionarLivro(livroASerSalvo) :
+					this.adicionarLivro() :
 					this.editarLivro(livroASerSalvo) :
 				MessageBox.alert("Preencha todos os campos");
 		},
@@ -147,19 +140,19 @@ sap.ui.define([
 			}
 		},
 
-		_limparCampoInput: function(entrada) {
+		_limparCampoInput: function (entrada) {
 			const estadoInicial = "None";
-            entrada.setValueState(estadoInicial);
+			entrada.setValueState(estadoInicial);
 		},
 
-		resetarTela: function (){
+		resetarTela: function () {
 			const inputData = "AnoPublicacao";
 			let tela = this.getView(),
-			 inputs = [
-				tela.byId(inputNome),
-				tela.byId(inputAutor),
-				tela.byId(inputEditora),
-				tela.byId(inputData)
+				inputs = [
+					tela.byId(inputNome),
+					tela.byId(inputAutor),
+					tela.byId(inputEditora),
+					tela.byId(inputData)
 				]
 			inputs.forEach(x => {
 				this._limparCampoInput(x);

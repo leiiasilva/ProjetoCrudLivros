@@ -9,9 +9,7 @@ sap.ui.define([
 	"use strict";
 
 	const nomeDaLista = "listaDeLivros";
-
 	return Controller.extend("sap.ui.demo.walkthrough.controller.ListaDeLivros", {
-
 
 		rota: null,
 		onInit: function () {
@@ -35,7 +33,7 @@ sap.ui.define([
 
 		aoClicarEmPesquisar: function (evento) {
 			const filtroSelecionado = "nome";
-			let livrosBuscados = []; //lista vazia
+			let livrosBuscados = []; 
 			let parametroPesquisa = evento.getParameter("query");
 			if (parametroPesquisa) {
 				livrosBuscados.push(new Filter(filtroSelecionado, FilterOperator.Contains, parametroPesquisa));
@@ -48,8 +46,6 @@ sap.ui.define([
 		aoClicarEmAdicionar: function () {
 			const rotaDeCadastro = "telaCadastro";
 			this._navegarParaRota(rotaDeCadastro, null);
-			// const rotaTelaCadastro = "telaCadastro";
-			// this.rota.navTo(rotaTelaCadastro)
 		},
 
 		aoClicarNoLivroDaLista: function (evento) {
@@ -68,7 +64,5 @@ sap.ui.define([
 				"id": parametroDaRota
 			}): rota.navTo(nomeDaRota)
 		}
-
-		
 	});
 });

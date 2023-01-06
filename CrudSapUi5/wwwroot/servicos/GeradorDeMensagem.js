@@ -1,28 +1,28 @@
 sap.ui.define([
     "sap/ui/base/Object",
     "sap/m/MessageBox"
-], function(Object, MessageBox) {
+], function (Object, MessageBox) {
     'use strict';
 
     return Object.extend("sap.ui.demo.walkthrough.controller.GeradorDeMensagem", {
 
-        MensagemComFuncao: function(tipo, texto, funcao){
-            if(tipo == "warning")
+        MensagemComFuncao: function (tipo, texto, funcao) {
+            if (tipo == "warning")
                 MessageBox.warning(texto, this._funcaoPorEscolha(funcao));
-            else if(tipo == "confirm")
+            else if (tipo == "confirm")
                 MessageBox.confirm(texto, this._funcaoPorEscolha(funcao));
         },
 
         MensagemErro: function (texto) {
-              MessageBox.error(texto);
+            MessageBox.error(texto);
         },
 
-        _funcaoPorEscolha: function(funcao) {
+        _funcaoPorEscolha: function (funcao) {
             return {
                 actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
                 emphasizedAction: MessageBox.Action.OK,
                 onClose: (escolha) => {
-                    if(escolha === 'OK')
+                    if (escolha === 'OK')
                         funcao.call(this);
                 }
             }
@@ -30,8 +30,8 @@ sap.ui.define([
 
         mensagemDeSucesso: function (texto) {
             MessageBox.success(texto)
-			
-		},
+
+        },
     })
-    
+
 });

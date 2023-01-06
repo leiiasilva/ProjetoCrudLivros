@@ -22,7 +22,6 @@ sap.ui.define([
 
 
 		cadastrarLivro: async function (livroAserSalvo) {
-			let livroASerCadastrado = livroAserSalvo;
 			let retorno = await fetch('https://localhost:7278/CrudLivro', {
 				method: 'POST',
 				headers: {
@@ -30,10 +29,10 @@ sap.ui.define([
 				},
 
 				body: JSON.stringify({
-					nome: livroASerCadastrado.nome,
-					autor: livroASerCadastrado.autor,
-					editora: livroASerCadastrado.editora,
-					anoPublicacao: livroASerCadastrado.anoPublicacao,
+					nome: livroAserSalvo.nome,
+					autor: livroAserSalvo.autor,
+					editora: livroAserSalvo.editora,
+					anoPublicacao: livroAserSalvo.anoPublicacao,
 				})
 			})
 
