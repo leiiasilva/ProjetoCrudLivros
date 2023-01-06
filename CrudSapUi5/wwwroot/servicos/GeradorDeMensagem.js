@@ -1,75 +1,37 @@
 sap.ui.define([
     "sap/ui/base/Object",
-    "sap/m/MessageBox",
-    "../servicos/RepositorioDeLivros"
-], function(Object, MessageBox, RepositorioDeLivros) {
+    "sap/m/MessageBox"
+], function(Object, MessageBox) {
     'use strict';
 
     return Object.extend("sap.ui.demo.walkthrough.controller.GeradorDeMensagem", {
 
-        paraConfirmarCadastro: function(){
-           
-            MessageBox.confirm("Deseja realmente cadastrar esse livro",{
-                title: "Confirmação",
-                actions: [
-                    sap.m.MessageBox.Action.OK,
-                    sap.M.MessageBox.Action.CANCEL
-                ],
-                onClose: function(oAction){
-                    if(oAction == 'OK'){
-                        MessageBox.show("Livro Cadastrado")
-                        // this._navegarParaRota(rota, null);
-                    }
-
-                }
-            })
+        MensagemComFuncao: function(tipo, texto, funcao){
+            if(tipo == "warning")
+                MessageBox.warning(texto, this._funcaoPorEscolha(funcao));
+            else if(tipo == "confirm")
+                MessageBox.confirm(texto, this._funcaoPorEscolha(funcao));
         },
 
-        paraConfirmarEdicao: function(){
-            let repositorio = new RepositorioDeLivros;
-            MessageBox.confirm("Deseja realmente editar esse livro",{
-                title: "Confirmação", 
-                actions: [
-                    sap.m.MessageBox.Action.OK,
-                    sap.m.MessageBox.Action.CANCEL
-                ],
-                onClose: function(confirmacao){
-                    if(confirmacao === 'OK'){
-                        // repositorio.editarLivro()
-                        // this._navegarParaRota(rota, null)
-                    }
-                }
-            })
-
+        MensagemErro: function (texto) {
+              MessageBox.error(texto);
         },
 
-        paraConfirmarExclusao: function(){
-            MessageBox.confirm("Deseja realmente deletar esse livro",{
-                title: "Confirmação",
-                actions: [
-                    sap.m.MessageBox.Action.OK,
-                    sap.m.MessageBox.Action.CANCEL
-                ],
-                onClose: function(confirmacao){
-                    if(confirmacao === 'OK'){
-                        this._navegarParaRota(rota, null)
-                    }
+        _funcaoPorEscolha: function(funcao) {
+            return {
+                actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+                emphasizedAction: MessageBox.Action.OK,
+                onClose: (escolha) => {
+                    if(escolha === 'OK')
+                        funcao.call(this);
                 }
-            })
+            }
         },
 
-        _navegarParaRota(nomeDaRota, codigo) {
-			let rota = this.getOwnerComponent().getRouter();
-			if (codigo !== null) {
-				rota.navTo(nomeDaRota, {
-					"id": codigo
-				})
-			} else {
-				rota.navTo(nomeDaRota)
-			}
-		}
-
-
+        mensagemDeSucesso: function (texto) {
+            MessageBox.success(texto)
+			
+		},
     })
     
 });

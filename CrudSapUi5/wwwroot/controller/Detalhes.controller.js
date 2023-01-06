@@ -2,14 +2,15 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageBox",
-	"sap/m/MessageToast",
-	"../servicos/RepositorioDeLivros"
+	"../servicos/RepositorioDeLivros",
+	"../servicos/GeradorDeMensagem"
 
-], function (Controller, JSONModel, MessageBox, MessageToast, RepositorioDeLivros) {
+], function (Controller, JSONModel, MessageBox, RepositorioDeLivros, GeradorDeMensagem) {
 	"use strict";
 
 	const nomeDoModelo = "livro";
 	const rotaDaLista = "overview";
+	let mensagem = new GeradorDeMensagem;
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.Detalhes", {
 
@@ -39,26 +40,13 @@ sap.ui.define([
 		},
 
 		aoClicarEmEditar: function () {
-			MessageBox.confirm("Deseja realmente editar esse Livro",{
-				title: "Confirmação",
-				actions: [
-					sap.m.MessageBox.Action.OK,
-					sap.m.MessageBox.Action.CANCEL
-				],
-				onClose: function(confirmacao){
-					if(confirmacao === 'OK'){
-						this._aoConfirmarEditar();
-					}
-				}.bind(this)
-			})
-			// const rotaEdicaoDeLivro = "editarLivro";
-			// let idEditarLivro = this.getView().getModel(nomeDoModelo).getData().codigo
-			// this.rota.navTo(rotaEdicaoDeLivro, {
-			// 	id: idEditarLivro
-			// });
+			const texto = "Deseja realmente editar esse Livro";
+			const tipo = "confirm";
+			let funcao = this._aoConfirmarEditar.bind(this);
+			mensagem.MensagemComFuncao(tipo, texto, funcao)
 		},
 
-		_aoConfirmarEditar: function(){
+		_aoConfirmarEditar: function () {
 			const rotaEdicaoDeLivro = "editarLivro";
 			let idEditarLivro = this.getView().getModel(nomeDoModelo).getData().codigo
 			this.rota.navTo(rotaEdicaoDeLivro, {
@@ -66,58 +54,25 @@ sap.ui.define([
 			});
 		},
 
-		// _mensagemDeSucessoEdicao: function(){
-		// 	MessageBox.success("Livro deletado com sucesso", {
-		// 		actions: [sap.m.MessageBox.Action.OK],
-		// 		onClose: function (confirmacao) {
-		// 			if (confirmacao === 'OK') {
-		// 			 this._navegarParaLista(rotaDaLista, null)
-		// 			}
-		// 		}.bind(this)
-		// 	})
-		// },
-
 		aoClicarEmDeletar: function () {
-			MessageBox.confirm("Deseja realmente deletar esse livro?", {
-				title: "Confirmação",
-				emphasizedAction: sap.m.MessageBox.Action.OK,
-				actions: [sap.m.MessageBox.Action.OK,
-				sap.m.MessageBox.Action.CANCEL
-				],
-				onClose: function (oAction) {
-					if (oAction === 'OK') {
-						this._aoConfirmarDeletar();
-					}
-				}.bind(this)
-			});
-
-
+			const texto = "Deseja realmente deletar esse livro?";
+			const tipo = "confirm";
+			let funcao = this._aoConfirmarDeletar.bind(this);
+			mensagem.MensagemComFuncao(tipo, texto, funcao)
 		},
 
 		_aoConfirmarDeletar: function () {
 			let excluirLivro = this.getView().getModel(nomeDoModelo).getData().codigo
 			let repositorio = new RepositorioDeLivros;
 			repositorio.deletarLivro(excluirLivro)
-			return this._mensagemDeSucesso();
-			// MessageBox.success("Livro deletado com sucesso", {
-			// 	actions: [sap.m.MessageBox.Action.OK],
-			// 	onClose: function (confirmacao) {
-			// 		if (confirmacao === 'OK') {
-			// 		 this._navegarParaLista(rotaDaLista, null)
-			// 		}
-			// 	}.bind(this)
-			// })
-		},
-		
-		_mensagemDeSucesso: function(){
-			MessageBox.success("Livro deletado com sucesso", {
-				actions: [sap.m.MessageBox.Action.OK],
-				onClose: function (confirmacao) {
-					if (confirmacao === 'OK') {
-					 this._navegarParaLista(rotaDaLista, null)
+				.then((resposta) => {
+					if (resposta && resposta.status == 200) {
+						mensagem.mensagemDeSucesso("Deletado com sucesso")
+					} else {
+						mensagem.MensagemErro("Falha ao deletar livro")
 					}
-				}.bind(this)
-			})
+
+				}, this._navegarParaLista(rotaDaLista, null))
 		},
 
 		_navegarParaLista(nomeDaRota, codigo) {

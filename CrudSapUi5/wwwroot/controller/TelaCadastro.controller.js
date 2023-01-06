@@ -15,17 +15,21 @@ sap.ui.define([
 	const nomeDoModelo = 'livro';
 	const rotaDaLista = "overview";
 	const rotaDetalhes = "detalhes";
+	let mensagem = new GeradorDeMensagem;
 
 	return Controller.extend("sap.ui.demo.walkthrough.controller.TelaCadastro", {
 
 		rota: null,
 		onInit: function () {
 			this.rota = this.getOwnerComponent().getRouter();
-			this.rota.attachRoutePatternMatched(this.ajustarRota, this);
+			this.rota.attachRoutePatternMatched(this._ajustarRota, this);
 		},
 
-		ajustarRota: function (evento) {
-			if (evento.getParameter("name") == "editarLivro") {
+		_ajustarRota: function (evento) {
+			const  nomeParametro = "name";
+			const rotaEditarLivro = "editarLivro";
+			this.resetarTela();
+			if (evento.getParameter(nomeParametro) == rotaEditarLivro) {
 				var idEditar = window.decodeURIComponent(evento.getParameter("arguments").id);
 				this.buscarLivro(idEditar)
 			} else {
@@ -48,45 +52,25 @@ sap.ui.define([
 		},
 
 		adicionarLivro: function (livroASerSalvo) {
-			MessageBox.confirm("Deseja realmente cadastrar esse livro", {
-				title: "Confirmação",
-				emphasizedAction: sap.m.MessageBox.Action.OK,
-				actions: [
-					sap.m.MessageBox.Action.OK,
-					sap.m.MessageBox.Action.CANCEL
-				],
-				onClose: async function (oAction) {
-					if (oAction === 'OK') {
-						this._paraConfirmarCadastro(livroASerSalvo)
-					}
-				}.bind(this)
-			})
-			// let repositorio = new RepositorioDeLivros;
-			// let result = await repositorio.cadastrarLivro(livroASerSalvo);
-			// this.rota.navTo(rotaDetalhes, {
-			// 	id: result.codigo
-			// });
+			const texto = "Deseja realmente cadastrar esse livro?";
+			const tipo = "confirm";
+			let funcao = this._paraConfirmarCadastro(livroASerSalvo)
+			mensagem.MensagemComFuncao(tipo, texto, funcao)
 		},
 
 
-		_paraConfirmarCadastro:  function (livroASerSalvo) {
+		_paraConfirmarCadastro: function (livroASerSalvo) {
 			MessageBox.success("Livro cadastrado com sucesso", {
 				actions: [sap.m.MessageBox.Action.OK],
-				onClose:  function (confirmacao) {
+				onClose: function (confirmacao) {
 					if (confirmacao === 'OK') {
 						this._confirmacaoDeCadastro(livroASerSalvo)
 					}
 				}.bind(this)
 			})
-
-			// let repositorio = new RepositorioDeLivros;
-			// let result = await repositorio.cadastrarLivro(livroASerSalvo);
-			// this.rota.navTo(rotaDetalhes, {
-			// 	id: result.codigo
-			// });
 		},
 
-		_confirmacaoDeCadastro:async function (livroASerSalvo) {
+		_confirmacaoDeCadastro: async function (livroASerSalvo) {
 			let repositorio = new RepositorioDeLivros;
 			let result = await repositorio.cadastrarLivro(livroASerSalvo);
 			this.rota.navTo(rotaDetalhes, {
@@ -96,22 +80,21 @@ sap.ui.define([
 
 
 		editarLivro: function (livroEditado) {
-			MessageBox.success("Livro editado com sucesso", {
-				actions: [sap.m.MessageBox.Action.OK],
-				onClose: function (confirmacao) {
-					if (confirmacao === 'OK') {
-						let _repositorio = new RepositorioDeLivros;
-						_repositorio.editarLivro(livroEditado);
-						this.rota.navTo(rotaDetalhes, {
-							id: livroEditado.codigo
-
-						});
-					}
-				}.bind(this)
-			})
+			let _repositorio = new RepositorioDeLivros;
+			_repositorio.editarLivro(livroEditado)
+				.then(() => {
+					mensagem.mensagemDeSucesso("Livro editado com sucesso")
+				})
+			this.rota.navTo(rotaDetalhes, {
+				id: livroEditado.codigo
+			});
 		},
 
 		aoClicarEmSalvar: function () {
+			this._validacaoDeCampos();
+		},
+
+		_validacaoDeCampos: function(){
 			const inputData = "AnoPublicacao";
 			let _validacaoLivro = new ValidacaoDeLivros;
 			let telaCadastro = this.getView();
@@ -152,6 +135,7 @@ sap.ui.define([
 				}.bind(this)
 			});
 		},
+
 		_navegarParaRota(nomeDaRota, codigo) {
 			let rota = this.getOwnerComponent().getRouter();
 			if (codigo !== null) {
@@ -163,6 +147,23 @@ sap.ui.define([
 			}
 		},
 
+		_limparCampoInput: function(entrada) {
+			const estadoInicial = "None";
+            entrada.setValueState(estadoInicial);
+		},
 
+		resetarTela: function (){
+			const inputData = "AnoPublicacao";
+			let tela = this.getView(),
+			 inputs = [
+				tela.byId(inputNome),
+				tela.byId(inputAutor),
+				tela.byId(inputEditora),
+				tela.byId(inputData)
+				]
+			inputs.forEach(x => {
+				this._limparCampoInput(x);
+			})
+		}
 	});
 });
