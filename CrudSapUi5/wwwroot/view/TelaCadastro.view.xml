@@ -16,7 +16,7 @@
 			required="true"
 			placeholder="Digite o nome do livro"
 			class="sapUiSmallMarginBottom" 
-			change="aoPreencherCampo"/>
+			change= ".limparCampoInput"/>
 
 		<Label text="Autor" labelFor="inputAutor" />
 		<Input

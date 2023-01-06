@@ -59,11 +59,10 @@ sap.ui.define([
 
 		deletarLivro: async function (excluirLivro) {
 			excluirLivro.codigo;
-			await fetch(`https://localhost:7278/CrudLivro/${excluirLivro}`, {
+			return await fetch(`https://localhost:7278/CrudLivro/${excluirLivro}`, {
 				method: 'DELETE'
 			})
 		}
-
 	});
 
 });
