@@ -56,7 +56,7 @@
 					<Text text="{listaDeLivros>editora}"/>
 					<Text text="{
 						path: 'listaDeLivros>anoPublicacao',
-						type: 'sap.ui.model.type.DateTime',
+						type: 'sap.ui.model.type.Date',
                         formatOptions: {
                             style: 'short',
                             source: {

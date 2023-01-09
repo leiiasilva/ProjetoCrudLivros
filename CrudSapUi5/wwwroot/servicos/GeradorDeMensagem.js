@@ -4,15 +4,14 @@ sap.ui.define([
 ], function (Object, MessageBox) {
     'use strict';
 
-    const extensao = "sap.ui.demo.walkthrough.controller.GeradorDeMensagem";
-    
+    const caminho = "sap.ui.demo.walkthrough.controller.GeradorDeMensagem";
+    return Object.extend(caminho, {
 
-    return Object.extend(extensao, {
-
-        MensagemComFuncao: function (tipo, texto, funcao) {
+        mensagemComFuncao:  function (tipo, texto, funcao) {
             return new Promise((resolve, reject) => {
                 const acao = 'OK';
-
+                const mensagemAtencao = "warning";
+                const mensagemConfirmacao = "confirm";
                 let opcoes = {
                     actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
                     emphasizedAction: MessageBox.Action.OK,
@@ -23,15 +22,14 @@ sap.ui.define([
                         resolve();
                     }
                 }
-
-                if (tipo == "warning")
+                if (tipo == mensagemAtencao)
                     MessageBox.warning(texto, opcoes);
-                else if (tipo == "confirm")
+                else if (tipo == mensagemConfirmacao)
                     MessageBox.confirm(texto, opcoes);
             });
         },
 
-        MensagemErro: function (texto) {
+        mensagemErro: function (texto) {
             return new Promise((resolve, reject) => {
                 MessageBox.error(texto, {
                     onClose: resolve

@@ -26,22 +26,17 @@ sap.ui.define([
 			this.buscarLivrosDoBancoDeDados();
 		},
 
-		buscarLivrosDoBancoDeDados: async function () { // verificar o then.. colocar async await
-			await this._repositorio.buscarTodosOsLivros()
-			let lista;
-			let modelo = new JSONModel(lista);
-			await this.getView().setModel(modelo, nomeDaLista)
-				// .then(lista => {
-				// 	let oModel = new JSONModel(lista);
-				// 	this.getView().setModel(oModel, nomeDaLista)
-				// })
+		buscarLivrosDoBancoDeDados: async function () {
+			let lista = await this._repositorio.buscarTodosOsLivros();
+					let modelo = new JSONModel(lista);
+					this.getView().setModel(modelo, nomeDaLista);
 		},
 
 		aoClicarEmPesquisar: function (evento) {
 			const consulta = "query";
 			const items = "items";
 			const filtroSelecionado = "nome";
-			let livrosBuscados = []; 
+			let livrosBuscados = [];
 			let parametroPesquisa = evento.getParameter(consulta);
 			if (parametroPesquisa) {
 				livrosBuscados.push(new Filter(filtroSelecionado, FilterOperator.Contains, parametroPesquisa));
@@ -68,9 +63,9 @@ sap.ui.define([
 
 		_navegarParaRota(nomeDaRota, parametroDaRota = null) {
 			(parametroDaRota !== null) ?
-			this.rota.navTo(nomeDaRota, {
-				"id": parametroDaRota
-			}): this.rota.navTo(nomeDaRota)
+				this.rota.navTo(nomeDaRota, {
+					id : parametroDaRota
+				}) : this.rota.navTo(nomeDaRota)
 		}
 	});
 });

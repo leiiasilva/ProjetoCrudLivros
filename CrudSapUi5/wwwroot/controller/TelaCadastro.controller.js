@@ -13,7 +13,7 @@ sap.ui.define([
 	const inputNome = 'inputNome';
 	const inputAutor = 'inputAutor';
 	const inputEditora = 'inputEditora';
-	const nomeDoModelo = 'livro';
+	const nomeDmodeloo = 'livro';
 	const rotaDaLista = "overview";
 	const rotaDetalhes = "detalhes";
 	let mensagem = new GeradorDeMensagem;
@@ -34,20 +34,18 @@ sap.ui.define([
 			const rotaEditarLivro = "editarLivro";
 			this.resetarTela();
 			if (evento.getParameter(nomeParametro) == rotaEditarLivro) {
-				var idEditar = window.decodeURIComponent(evento.getParameter(parametro).id);
+				let idEditar = window.decodeURIComponent(evento.getParameter(parametro).id);
 				this.buscarLivro(idEditar)
 			} else {
-				this.getView().setModel(new sap.ui.model.json.JSONModel({}), nomeDoModelo);
+				this.getView().setModel(new sap.ui.model.json.JSONModel({}), nomeDmodeloo);
 			}
 		},
 
-
-		buscarLivro: function (livroASerBuscadoPorId) {
-			this._repositorio.buscarLivroPorId(livroASerBuscadoPorId)
-				.then(lista => {
-					let oModel = new JSONModel(lista);
-					this.getView().setModel(oModel, nomeDoModelo)
-				})
+		buscarLivro: async function (livroASerBuscadoPorId) {
+			let lista = await this._repositorio.buscarLivroPorId(livroASerBuscadoPorId)
+			let modelo = new JSONModel(lista);
+				this.getView().setModel(modelo, nomeDmodeloo)
+			
 		},
 
 		aoClicarEmVoltar: function () {
@@ -55,17 +53,19 @@ sap.ui.define([
 		},
 
 		adicionarLivro: async function () {
-			const texto = "Deseja realmente cadastrar esse livro?";
+			const mensagemCadastro = "confirmarCadastro"
+			const texto = this.mensagemi18n(mensagemCadastro);
 			const tipo = "confirm";
 			let funcao = this._confirmacaoDeCadastro.bind(this)
-			mensagem.MensagemComFuncao(tipo, texto, funcao)
+			await mensagem.mensagemComFuncao(tipo, texto, funcao)
 		},
 
 		_confirmacaoDeCadastro: async function () {
-			let	livroASerSalvo = this.getView().getModel(nomeDoModelo).getData();
+			const mensagemSucessoCadastro = "mensagemDeSucessoCadastro"
+			const texto = this.mensagemi18n(mensagemSucessoCadastro);
+			let	livroASerSalvo = this.getView().getModel(nomeDmodeloo).getData();
 			let livroASerCadastrado = await this._repositorio.cadastrarLivro(livroASerSalvo);
-			await mensagem.mensagemDeSucesso("Livro Cadastrado com sucesso");
-
+			await mensagem.mensagemDeSucesso(texto);
 			this.rota.navTo(rotaDetalhes, {
 				id: livroASerCadastrado.codigo
 			});
@@ -73,9 +73,10 @@ sap.ui.define([
 
 
 		editarLivro: async function (livroEditado) {
+			const mensagemDeSucessoEdicao = "mensagemDeSucessoEdicao"
+			const texto = this.mensagemi18n(mensagemDeSucessoEdicao);
 			await this._repositorio.editarLivro(livroEditado);
-			await mensagem.mensagemDeSucesso("Livro editado com sucesso");
-
+			await mensagem.mensagemDeSucesso(texto);
 			this.rota.navTo(rotaDetalhes, {
 				id: livroEditado.codigo
 			});
@@ -86,6 +87,8 @@ sap.ui.define([
 		},
 
 		_validacaoDeCampos: function () {
+			const mensagemValidacao = "validacaoDeCamposMensagem";
+			const texto = this.mensagemi18n(mensagemValidacao);
 			const inputData = "AnoPublicacao";
 			let _validacaoLivro = new ValidacaoDeLivros;
 			let telaCadastro = this.getView();
@@ -96,46 +99,32 @@ sap.ui.define([
 			];
 
 			let valorInputData = this.getView().byId(inputData);
-			let erroDeValidacaoDeCampos = _validacaoLivro.ValidarCadastro(inputs, valorInputData).erroDeInput;
-			let erroDeValidacaoDeData = _validacaoLivro.ValidarCadastro(inputs, valorInputData).erroDeData;
-			let livroASerSalvo = this.getView().getModel(nomeDoModelo).getData();
+			let erroDeValidacaoDeCampos = _validacaoLivro.validarCadastro(inputs, valorInputData).erroDeInput;
+			let erroDeValidacaoDeData = _validacaoLivro.validarCadastro(inputs, valorInputData).erroDeData;
+			let livroASerSalvo = this.getView().getModel(nomeDmodeloo).getData();
 
 			!erroDeValidacaoDeCampos && !erroDeValidacaoDeData ?
 
 				!livroASerSalvo.codigo ?
 					this.adicionarLivro() :
 					this.editarLivro(livroASerSalvo) :
-				MessageBox.alert("Preencha todos os campos");
+				MessageBox.alert(texto);
 		},
 
 		aoClicarEmCancelar: function () {
-			this._retornoDeNavegacao(rotaDaLista);
+			this._retornoDeNavegacao();
 		},
 
-		_retornoDeNavegacao: function (rota) {
-			MessageBox.confirm("Ao voltar todas as informações serão perdidas. Deseja continuar?", {
-				title: "Confirmação",
-				emphasizedAction: sap.m.MessageBox.Action.OK,
-				actions: [sap.m.MessageBox.Action.OK,
-				sap.m.MessageBox.Action.CANCEL
-				],
-				onClose: function (confirmacao) {
-					if (confirmacao === 'OK') {
-						this._navegarParaRota(rota, null);
-					}
-				}.bind(this)
-			});
+		_retornoDeNavegacao: async function () {
+			const mensagemCancelar = "mensagemCancelamento"
+			const texto = this.mensagemi18n(mensagemCancelar);
+			const tipo = "confirm";
+			let funcao = this._navegarParaRota.bind(this)
+			await mensagem.mensagemComFuncao(tipo, texto, funcao)
 		},
 
-		_navegarParaRota(nomeDaRota, codigo) {
-			let rota = this.getOwnerComponent().getRouter();
-			if (codigo !== null) {
-				rota.navTo(nomeDaRota, {
-					"id": codigo
-				})
-			} else {
-				rota.navTo(nomeDaRota)
-			}
+		_navegarParaRota() {
+			this.rota.navTo(rotaDaLista, {});
 		},
 
 		_limparCampoInput: function (entrada) {
@@ -155,6 +144,12 @@ sap.ui.define([
 			inputs.forEach(x => {
 				this._limparCampoInput(x);
 			})
+		},
+
+		mensagemi18n: function(texto) {
+			const modelo = "i18n";
+			let i18n = this.getView().getModel(modelo).getResourceBundle();
+			return i18n.getText(texto);
 		}
 	});
 });

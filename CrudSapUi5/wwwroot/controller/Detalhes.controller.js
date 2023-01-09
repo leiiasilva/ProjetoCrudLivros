@@ -15,7 +15,7 @@ sap.ui.define([
 	return Controller.extend(caminho, {
 
 		rota: null,
-		_repositorio: null, //propriedade
+		_repositorio: null, 
 		onInit: function () {
 			const rotaDetalhes = "detalhes";
 			this.rota = this.getOwnerComponent().getRouter();
@@ -29,12 +29,11 @@ sap.ui.define([
 			this.buscarLivroDaLista(mostrarDetalhes);
 		},
 
-		buscarLivroDaLista: function (livroASerExibido) { // verificar para arrumar o then e usar async e await
-			this._repositorio.buscarLivroPorId(livroASerExibido)
-				.then(lista => {
-					let modelo = new JSONModel(lista);
-					this.getView().setModel(modelo, nomeDoModelo)
-				})
+		buscarLivroDaLista: async function (livroASerExibido) { 
+			let lista = await this._repositorio.buscarLivroPorId(livroASerExibido)
+			let modelo = new JSONModel(lista);
+				this.getView().setModel(modelo, nomeDoModelo)
+				
 		},
 
 		aoClicarEmVoltar: function () {
@@ -42,10 +41,11 @@ sap.ui.define([
 		},
 
 		aoClicarEmEditar: async function () {
-			const texto = "Deseja realmente editar esse Livro";
+			const mensagemDeConfirmacao = "confirmacaoEdicao";
+			const texto = this.mensagemi18n(mensagemDeConfirmacao);
 			const tipo = "confirm";
 			let funcao = this._aoConfirmarEditar.bind(this);
-			await mensagem.MensagemComFuncao(tipo, texto, funcao);
+			await mensagem.mensagemComFuncao(tipo, texto, funcao);
 		},
 
 		_aoConfirmarEditar: function () {
@@ -57,28 +57,45 @@ sap.ui.define([
 		},
 
 		aoClicarEmDeletar: async  function () {
-			const texto = "Deseja realmente deletar esse livro?";
+			const confirmacao = "confirmarExclusao";
+			const texto = this.mensagemi18n(confirmacao);
 			const tipo = "confirm";
 			let funcao = this._aoConfirmarDeletar.bind(this);
-			await mensagem.MensagemComFuncao(tipo, texto, funcao);
+			await mensagem.mensagemComFuncao(tipo, texto, funcao);
 		},
 
 		_aoConfirmarDeletar: async function () {
-			let excluirLivro = this.getView().getModel(nomeDoModelo).getData().codigo
-			this._repositorio.deletarLivro(excluirLivro);
-			 await mensagem.mensagemDeSucesso("Livro deletado com sucesso");
-			 this._navegarParaLista(rotaDaLista, null);
+			const statusHttp = 200;
+			let resposta;
+			const mensagemSucesso = "mensagemDeSucessoExclusao";
+			const texto = this.mensagemi18n(mensagemSucesso);
+			let excluirLivro = this.getView().getModel(nomeDoModelo).getData().codigo+2
+			resposta = await this._repositorio.deletarLivro(excluirLivro);
+			if(resposta && resposta.status == statusHttp){
+			 	await mensagem.mensagemDeSucesso(texto);
+				 this._navegarParaLista(rotaDaLista, null);
+			}else{
+				await mensagem.mensagemErro("Falha ao deletar livro");
+			}
+			
+			// this._navegarParaLista(rotaDaLista, null);
 
 		},
 
-		_navegarParaLista(nomeDaRota, codigo) { // verificar sobre a string 'codigo'
+		_navegarParaLista(nomeDaRota, codigo) { 
 			if (codigo !== null) {
 				this.rota.navTo(nomeDaRota, {
-					"codigo": codigo
+					id: codigo
 				});
 			} else {
 				this.rota.navTo(nomeDaRota)
 			}
 		},
+
+		mensagemi18n: function(texto) {
+			const modelo = "i18n";
+			let i18n = this.getView().getModel(modelo).getResourceBundle();
+			return i18n.getText(texto);
+		}
 	});
 })

@@ -3,9 +3,10 @@ sap.ui.define([
 ], function (Object) {
 	"use strict";
 
-	return Object.extend("sap.ui.demo.walkthrough.controller.ValidacaoDeLivros", {
+	const caminho = "sap.ui.demo.walkthrough.controller.ValidacaoDeLivros";
+	return Object.extend(caminho, {
 
-		ValidarCadastro: function (inputsDeCampo, data) {
+		validarCadastro: function (inputsDeCampo, data) {
 			let erroDeInput = false;
 			let erroDeData = false;
 
@@ -19,12 +20,13 @@ sap.ui.define([
 		},
 
 		_validarData: function (inputData) {
+			const texto = "A data deve ser válida e preenchida entre 1900 e hoje";
 			let dataInputada = inputData.getValue();
 			let estado = "None";
 			let erroDeValidacao = false;
 			let dataMinimaValida = new Date(1860, 1, 1).toISOString();
 			let dataMaximaValida = new Date().toISOString();
-
+			
 			if (dataInputada.length == 0) {
 				estado = "Error"
 				erroDeValidacao = true;
@@ -43,16 +45,16 @@ sap.ui.define([
 				erroDeValidacao = true;
 			}
 			inputData.setValueState(estado);
-			inputData.setValueStateText("A data deve ser válida e preenchida entre 1900 e hoje");
+			inputData.setValueStateText(texto);
 			return erroDeValidacao;
 			
 		},
 
 		_validarCampo: function (input){
+			const texto = "O campo deve conter 1-80 caracteres";
 			var estado = 'None';
 			var erroDeValidacao = false;
 			let valor = input.getValue();
-
 			try{
 				if(valor.length == 0 || valor.length > 80)
 					throw new Error();
@@ -60,13 +62,10 @@ sap.ui.define([
 			}catch(oException){
 				estado = "Error";
 				erroDeValidacao = true;
-				input.setValueStateText("O campo deve conter 1-80 caracteres");
+				input.setValueStateText(texto);
 			}
 			input.setValueState(estado);
 			return erroDeValidacao;
-
 		}
-
-		
 	});
 });

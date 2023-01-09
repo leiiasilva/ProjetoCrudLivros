@@ -3,29 +3,32 @@ sap.ui.define([
 ], function (Object) {
 	'use strict';
 
-	return Object.extend("sap.ui.demo.walkthrough.controller.RepositorioDeLivros", {
+	const url = `https://localhost:7278/CrudLivro`;
+	const conteudo = "application/json; charset=utf-8";
+	const caminho = "sap.ui.demo.walkthrough.controller.RepositorioDeLivros";
+	return Object.extend(caminho, {
 
 		buscarTodosOsLivros: async function () {
 			let ObterTodosOsLivros;
-			await fetch(`https://localhost:7278/CrudLivro`)
+			await fetch(url)
 				.then(response => response.json())
 				.then(data => ObterTodosOsLivros = data)
 			return ObterTodosOsLivros;
 		},
 
 		buscarLivroPorId: function (idLivroBuscado) {
-			let livroBuscado = fetch(`https://localhost:7278/CrudLivro/${idLivroBuscado}`)
+			const urlLivroBuscadoPorId = `${url}/${idLivroBuscado}`;
+			let livroBuscado = fetch(urlLivroBuscadoPorId)
 				.then((response) => response.json())
 				.then(data => livroBuscado = data)
 			return livroBuscado;
 		},
 
-
 		cadastrarLivro: async function (livroAserSalvo) {
-			let retorno = await fetch('https://localhost:7278/CrudLivro', {
+			let retorno = await fetch(url, {
 				method: 'POST',
 				headers: {
-					'content-type': "application/json; charset=utf-8"
+					'content-type': conteudo
 				},
 
 				body: JSON.stringify({
@@ -41,10 +44,11 @@ sap.ui.define([
 
 		editarLivro: async function (livroEditado) {
 			let livroASerEditado = livroEditado;
-			await fetch(`https://localhost:7278/CrudLivro/${livroASerEditado.codigo}`, {
+			const urlPut = `${url}/${livroASerEditado.codigo}`;
+			await fetch(urlPut, {
 				method: 'PUT',
 				headers: {
-					"Content-Type": "application/json; charset=utf-8"
+					"Content-Type": conteudo
 				},
 				body: JSON.stringify({
 					nome: livroASerEditado.nome,
@@ -55,10 +59,10 @@ sap.ui.define([
 			})
 		},
 
-
 		deletarLivro: async function (excluirLivro) {
+			const urlDelete = `${url}/${excluirLivro}`
 			excluirLivro.codigo;
-			return await fetch(`https://localhost:7278/CrudLivro/${excluirLivro}`, {
+			return await fetch(urlDelete, {
 				method: 'DELETE'
 			})
 		}
