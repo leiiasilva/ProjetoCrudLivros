@@ -15,12 +15,12 @@ sap.ui.define([
 	return Controller.extend(caminho, {
 
 		rota: null,
-		_repositorio: null, 
+		_repositorio: null,
 		onInit: function () {
 			const rotaDetalhes = "detalhes";
 			this.rota = this.getOwnerComponent().getRouter();
 			this.rota.getRoute(rotaDetalhes).attachPatternMatched(this._ajustarRota, this);
-			this._repositorio =  new RepositorioDeLivros;
+			this._repositorio = new RepositorioDeLivros;
 		},
 
 		_ajustarRota: function (evento) {
@@ -29,11 +29,11 @@ sap.ui.define([
 			this.buscarLivroDaLista(mostrarDetalhes);
 		},
 
-		buscarLivroDaLista: async function (livroASerExibido) { 
+		buscarLivroDaLista: async function (livroASerExibido) {
 			let lista = await this._repositorio.buscarLivroPorId(livroASerExibido)
 			let modelo = new JSONModel(lista);
-				this.getView().setModel(modelo, nomeDoModelo)
-				
+			this.getView().setModel(modelo, nomeDoModelo)
+
 		},
 
 		aoClicarEmVoltar: function () {
@@ -56,7 +56,7 @@ sap.ui.define([
 			});
 		},
 
-		aoClicarEmDeletar: async  function () {
+		aoClicarEmDeletar: async function () {
 			const confirmacao = "confirmarExclusao";
 			const texto = this.mensagemi18n(confirmacao);
 			const tipo = "confirm";
@@ -73,15 +73,15 @@ sap.ui.define([
 			const textoErro = this.mensagemi18n(mensagemErro);
 			let excluirLivro = this.getView().getModel(nomeDoModelo).getData().codigo
 			resposta = await this._repositorio.deletarLivro(excluirLivro);
-			if(resposta && resposta.status == statusHttp){
-			 	await mensagem.mensagemDeSucesso(texto);
-				 this._navegarParaLista(rotaDaLista, null);
-			}else{
+			if (resposta && resposta.status == statusHttp) {
+				await mensagem.mensagemDeSucesso(texto);
+				this._navegarParaLista(rotaDaLista, null);
+			} else {
 				await mensagem.mensagemErro(textoErro);
 			}
 		},
 
-		_navegarParaLista(nomeDaRota, codigo) { 
+		_navegarParaLista(nomeDaRota, codigo) {
 			if (codigo !== null) {
 				this.rota.navTo(nomeDaRota, {
 					id: codigo
@@ -91,7 +91,7 @@ sap.ui.define([
 			}
 		},
 
-		mensagemi18n: function(texto) {
+		mensagemi18n: function (texto) {
 			const modelo = "i18n";
 			let i18n = this.getView().getModel(modelo).getResourceBundle();
 			return i18n.getText(texto);

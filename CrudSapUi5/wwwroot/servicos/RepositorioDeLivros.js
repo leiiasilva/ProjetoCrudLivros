@@ -38,11 +38,7 @@ sap.ui.define([
 					anoPublicacao: livroAserSalvo.anoPublicacao,
 				})
 			})
-			// }).then(response =>{
-			// 	return response.json();
-			// }).catch(response)
-
-		  	return retorno;
+			return retorno;
 		},
 
 		editarLivro: async function (livroEditado) {

@@ -7,7 +7,7 @@ sap.ui.define([
     const caminho = "sap.ui.demo.walkthrough.controller.GeradorDeMensagem";
     return Object.extend(caminho, {
 
-        mensagemComFuncao:  function (tipo, texto, funcao) {
+        mensagemComFuncao: function (tipo, texto, funcao) {
             return new Promise((resolve, reject) => {
                 const acao = 'OK';
                 const mensagemAtencao = "warning";
@@ -16,7 +16,7 @@ sap.ui.define([
                     actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
                     emphasizedAction: MessageBox.Action.OK,
                     onClose: (escolha) => {
-                        if (escolha === acao){
+                        if (escolha === acao) {
                             funcao.call(this);
                         }
                         resolve();

@@ -28,8 +28,8 @@ sap.ui.define([
 
 		buscarLivrosDoBancoDeDados: async function () {
 			let lista = await this._repositorio.buscarTodosOsLivros();
-					let modelo = new JSONModel(lista);
-					this.getView().setModel(modelo, nomeDaLista);
+			let modelo = new JSONModel(lista);
+			this.getView().setModel(modelo, nomeDaLista);
 		},
 
 		aoClicarEmPesquisar: function (evento) {
@@ -64,7 +64,7 @@ sap.ui.define([
 		_navegarParaRota(nomeDaRota, parametroDaRota = null) {
 			(parametroDaRota !== null) ?
 				this.rota.navTo(nomeDaRota, {
-					id : parametroDaRota
+					id: parametroDaRota
 				}) : this.rota.navTo(nomeDaRota)
 		}
 	});
