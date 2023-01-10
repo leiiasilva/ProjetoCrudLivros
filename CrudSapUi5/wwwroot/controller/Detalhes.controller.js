@@ -69,17 +69,16 @@ sap.ui.define([
 			let resposta;
 			const mensagemSucesso = "mensagemDeSucessoExclusao";
 			const texto = this.mensagemi18n(mensagemSucesso);
-			let excluirLivro = this.getView().getModel(nomeDoModelo).getData().codigo+2
+			const mensagemErro = "mensagemDeErro";
+			const textoErro = this.mensagemi18n(mensagemErro);
+			let excluirLivro = this.getView().getModel(nomeDoModelo).getData().codigo
 			resposta = await this._repositorio.deletarLivro(excluirLivro);
 			if(resposta && resposta.status == statusHttp){
 			 	await mensagem.mensagemDeSucesso(texto);
 				 this._navegarParaLista(rotaDaLista, null);
 			}else{
-				await mensagem.mensagemErro("Falha ao deletar livro");
+				await mensagem.mensagemErro(textoErro);
 			}
-			
-			// this._navegarParaLista(rotaDaLista, null);
-
 		},
 
 		_navegarParaLista(nomeDaRota, codigo) { 

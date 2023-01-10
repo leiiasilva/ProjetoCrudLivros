@@ -44,8 +44,8 @@ sap.ui.define([
 		buscarLivro: async function (livroASerBuscadoPorId) {
 			let lista = await this._repositorio.buscarLivroPorId(livroASerBuscadoPorId)
 			let modelo = new JSONModel(lista);
-				this.getView().setModel(modelo, nomeDmodeloo)
-			
+			this.getView().setModel(modelo, nomeDmodeloo)
+
 		},
 
 		aoClicarEmVoltar: function () {
@@ -61,22 +61,38 @@ sap.ui.define([
 		},
 
 		_confirmacaoDeCadastro: async function () {
-			const mensagemSucessoCadastro = "mensagemDeSucessoCadastro"
+			const statusHttpCriado = 201;
+			const mensagemSucessoCadastro = "mensagemDeSucessoCadastro";
 			const texto = this.mensagemi18n(mensagemSucessoCadastro);
-			let	livroASerSalvo = this.getView().getModel(nomeDmodeloo).getData();
+			const mensagemFalhaCadastro = "mensagemDeErroCadastro";
+			const textoErro = this.mensagemi18n(mensagemFalhaCadastro);
+			let livroASerSalvo = this.getView().getModel(nomeDmodeloo).getData();
 			let livroASerCadastrado = await this._repositorio.cadastrarLivro(livroASerSalvo);
-			await mensagem.mensagemDeSucesso(texto);
-			this.rota.navTo(rotaDetalhes, {
-				id: livroASerCadastrado.codigo
-			});
+			if (livroASerCadastrado && livroASerCadastrado.status == statusHttpCriado) {
+				let livroCadastrado = await livroASerCadastrado.json();
+				await mensagem.mensagemDeSucesso(texto);
+				this.rota.navTo(rotaDetalhes, {
+					id: livroCadastrado.codigo
+				});
+			} else {
+				await mensagem.mensagemErro(textoErro)
+			}
 		},
 
 
 		editarLivro: async function (livroEditado) {
-			const mensagemDeSucessoEdicao = "mensagemDeSucessoEdicao"
+			const statusHttpSucesso = 200;
+			const mensagemDeSucessoEdicao = "mensagemDeSucessoEdicao";
 			const texto = this.mensagemi18n(mensagemDeSucessoEdicao);
-			await this._repositorio.editarLivro(livroEditado);
-			await mensagem.mensagemDeSucesso(texto);
+			const mensagemDeFalhaEdicao = "mensagemDeErroEdicao";
+			const textoErro = this.mensagemi18n(mensagemDeFalhaEdicao);
+			let resposta = await this._repositorio.editarLivro(livroEditado);
+			if (resposta && resposta.status == statusHttpSucesso) {
+				await mensagem.mensagemDeSucesso(texto);
+
+			} else {
+				await mensagem.mensagemErro(textoErro)
+			}
 			this.rota.navTo(rotaDetalhes, {
 				id: livroEditado.codigo
 			});
@@ -146,7 +162,7 @@ sap.ui.define([
 			})
 		},
 
-		mensagemi18n: function(texto) {
+		mensagemi18n: function (texto) {
 			const modelo = "i18n";
 			let i18n = this.getView().getModel(modelo).getResourceBundle();
 			return i18n.getText(texto);

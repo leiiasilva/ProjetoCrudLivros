@@ -38,14 +38,17 @@ sap.ui.define([
 					anoPublicacao: livroAserSalvo.anoPublicacao,
 				})
 			})
+			// }).then(response =>{
+			// 	return response.json();
+			// }).catch(response)
 
-			return await retorno.json();
+		  	return retorno;
 		},
 
 		editarLivro: async function (livroEditado) {
 			let livroASerEditado = livroEditado;
 			const urlPut = `${url}/${livroASerEditado.codigo}`;
-			await fetch(urlPut, {
+			return await fetch(urlPut, {
 				method: 'PUT',
 				headers: {
 					"Content-Type": conteudo
